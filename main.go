@@ -8,7 +8,8 @@ import (
   "os"
 
   "fmt"
-  // "github.com/gorilla/mux"
+  "github.com/gorilla/mux"
+  "net/http"
 )
 
 func main() {
@@ -30,6 +31,12 @@ func main() {
   if err != nil {
     log.Fatal(err)
   }
+
+  r := mux.NewRouter()
+  Route(r)
+
+  fmt.Println("Listening on port 8080")
+  http.ListenAndServe(":8080", r)
 
   defer db.Close()
 
