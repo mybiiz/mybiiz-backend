@@ -32,6 +32,7 @@ func DbInit() *gorm.DB {
 	db.AutoMigrate(&Role{})
 	db.AutoMigrate(&Building{})
 	db.AutoMigrate(&Room{})
+	db.AutoMigrate(&ComingSoonEmail{})
 
 	return db
 }

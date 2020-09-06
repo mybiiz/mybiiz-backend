@@ -107,6 +107,22 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	// 	db.Save(&user)
 	// })
 
+	// ComingSoonEmail
+	r.HandleFunc("/coming-soon-emails", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		var comingSoonEmails []ComingSoonEmail
+		db.Find(&comingSoonEmails).Order("id desc")
+		json.NewEncoder(w).Encode(comingSoonEmails)
+	}).Methods("GET")
+
+	r.HandleFunc("/coming-soon-emails", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		var comingSoonEmail ComingSoonEmail
+		json.NewDecoder(r.Body).Decode(&comingSoonEmail)
+		db.Save(&comingSoonEmail)
+		json.NewEncoder(w).Encode(comingSoonEmail)
+	}).Methods("POST")
+
 	r.HandleFunc("/populate", func(w http.ResponseWriter, r *http.Request) {
 		var buildings []Building
 		buildings = []Building{

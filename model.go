@@ -37,3 +37,8 @@ type Room struct {
 	Name   string `json:"name"`
 	Number string `json:"number"`
 }
+
+type ComingSoonEmail struct {
+	gorm.Model
+	Email string `json:"email"`
+}
