@@ -26,7 +26,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 
 	r.HandleFunc("/buildings/{id}", func(w http.ResponseWriter, r *http.Request) {
 		var building Building
-		All(db, &building, w, r)
+		Get(db, &building, w, r)
 	}).Methods("GET")
 
 	r.HandleFunc("/buildings/{id}", func(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +47,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 
 	r.HandleFunc("/partners/{id}", func(w http.ResponseWriter, r *http.Request) {
 		var partner Partner
-		All(db, &partner, w, r)
+		Get(db, &partner, w, r)
 	}).Methods("GET")
 
 	r.HandleFunc("/partners/{id}", func(w http.ResponseWriter, r *http.Request) {
