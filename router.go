@@ -1,23 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
-
-// Rest funcs
-func Get(db *gorm.DB, table interface{}) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
-		// var row []Table
-		db.Find(&table).Order("id desc")
-		json.NewEncoder(w).Encode(table)
-	}
-}
 
 func Route(r *mux.Router, dbPointer **gorm.DB) {
 	db := *dbPointer
@@ -31,61 +20,44 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 
 	// Building
 	r.HandleFunc("/buildings", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
 		var buildings []Building
-		db.Find(&buildings).Order("id desc")
-		json.NewEncoder(w).Encode(buildings)
+		All(db, &buildings, w, r)
 	}).Methods("GET")
-	// r.HandleFunc("/buildings", Get(db, []Building{}))
 
 	r.HandleFunc("/buildings/{id}", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
-		id := mux.Vars(r)["id"]
 		var building Building
-		db.First(&building, "id = ?", id)
-		json.NewEncoder(w).Encode(building)
+		All(db, &building, w, r)
 	}).Methods("GET")
 
 	r.HandleFunc("/buildings/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		db.Delete(&Building{}, id)
+		var building Building
+		Delete(db, &building, w, r)
 	}).Methods("DELETE")
 
 	r.HandleFunc("/buildings", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
 		var building Building
-		json.NewDecoder(r.Body).Decode(&building)
-		db.Save(&building)
-		json.NewEncoder(w).Encode(building)
+		Post(db, &building, w, r)
 	}).Methods("POST")
 
 	// Partner
 	r.HandleFunc("/partners", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
 		var partners []Partner
-		db.Find(&partners).Order("id desc")
-		json.NewEncoder(w).Encode(partners)
+		All(db, &partners, w, r)
 	}).Methods("GET")
 
 	r.HandleFunc("/partners/{id}", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
-		id := mux.Vars(r)["id"]
 		var partner Partner
-		db.First(&partner, "id = ?", id)
-		json.NewEncoder(w).Encode(partner)
+		All(db, &partner, w, r)
 	}).Methods("GET")
 
 	r.HandleFunc("/partners/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		db.Delete(&Partner{}, "id = ?", id)
+		var partner Partner
+		Delete(db, &partner, w, r)
 	}).Methods("DELETE")
 
 	r.HandleFunc("/partners", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
 		var partner Partner
-		json.NewDecoder(r.Body).Decode(&partner)
-		db.Save(&partner)
-		json.NewEncoder(w).Encode(partner)
+		Post(db, &partner, w, r)
 	}).Methods("POST")
 
 	// Room
@@ -109,18 +81,13 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 
 	// ComingSoonEmail
 	r.HandleFunc("/coming-soon-emails", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
 		var comingSoonEmails []ComingSoonEmail
-		db.Find(&comingSoonEmails).Order("id desc")
-		json.NewEncoder(w).Encode(comingSoonEmails)
+		All(db, &comingSoonEmails, w, r)
 	}).Methods("GET")
 
 	r.HandleFunc("/coming-soon-emails", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
 		var comingSoonEmail ComingSoonEmail
-		json.NewDecoder(r.Body).Decode(&comingSoonEmail)
-		db.Save(&comingSoonEmail)
-		json.NewEncoder(w).Encode(comingSoonEmail)
+		Post(db, &comingSoonEmail, w, r)
 	}).Methods("POST")
 
 	r.HandleFunc("/populate", func(w http.ResponseWriter, r *http.Request) {
