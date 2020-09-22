@@ -27,12 +27,39 @@ func DbInit() *gorm.DB {
 		log.Fatal("Error openign database")
 	}
 
-	db.AutoMigrate(&Partner{})
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&Role{})
-	db.AutoMigrate(&Building{})
-	db.AutoMigrate(&Room{})
-	db.AutoMigrate(&ComingSoonEmail{})
+	tables := []interface{}{
+		&Partner{},
+		&Role{},
+		&Business{},
+		&Building{},
+		&Room{},
+		&GuestType{},
+		&CancellationFee{},
+		&RoomType{},
+		&FoodAccomodation{},
+		&ComingSoonEmail{},
+		&Bank{},
+		&Car{},
+		&CarType{},
+		&FuelType{},
+		&Laundry{},
+		&LaundryType{},
+		&User{}}
+
+	for _, table := range tables {
+		db.AutoMigrate(table)
+	}
+
+	// db.AutoMigrate(&Partner{})
+	// db.AutoMigrate(&User{})
+	// db.AutoMigrate(&Role{})
+	// db.AutoMigrate(&Building{})
+	// db.AutoMigrate(&Room{})
+	// db.AutoMigrate(&ComingSoonEmail{})
+	// db.AutoMigrate(&Bank{})
+
+	// db.Save(&Partner{
+	// 	Name: "My Partner"})
 
 	return db
 }
