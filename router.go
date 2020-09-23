@@ -1,11 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
+	"os"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	"github.com/joho/godotenv"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Route(r *mux.Router, dbPointer **gorm.DB) {
@@ -15,7 +21,90 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 		fmt.Fprintf(w, "Hello world!")
 	})
 
+	// Login
+	r.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		// Load secret key
+		err := godotenv.Load()
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		jwtSecret := os.Getenv("JWT_SECRET")
+
+		var loginBody LoginBody
+		json.NewDecoder(r.Body).Decode(&loginBody)
+
+		// fmt.Println("Decode body success")
+
+		var user User
+		if res := db.Where("email = ?", loginBody.Email).First(&user); res.Error != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		// fmt.Printf("JWT secret %s\n", jwtSecret)
+		// fmt.Println("Found user")
+
+		if notMatch := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginBody.Password)); notMatch != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		// fmt.Println("Passwrd match")
+
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"id": user.ID})
+
+		tokenString, err := token.SignedString([]byte(jwtSecret))
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		// fmt.Println("Token generated")
+		// fmt.Println(tokenString)
+
+		fmt.Fprintf(w, "%s", tokenString)
+	}).Methods("POST")
+
+	// Generate secure JWT secret
+	r.HandleFunc("/generate", func(w http.ResponseWriter, r *http.Request) {
+		letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+
+		b := make([]rune, 64)
+		for i := range b {
+			b[i] = letters[rand.Intn(len(letters))]
+		}
+
+		fmt.Fprintf(w, "%s", string(b))
+	}).Methods("GET")
+
 	// User
+	r.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		var users []User
+		All(db, &users, w, r)
+	}).Methods("GET")
+
+	r.HandleFunc("/users/{id}", func(w http.ResponseWriter, r *http.Request) {
+		var user User
+		Get(db, &user, w, r)
+	}).Methods("GET")
+
+	r.HandleFunc("/users/{id}", func(w http.ResponseWriter, r *http.Request) {
+		var user User
+		Delete(db, &user, w, r)
+	}).Methods("DELETE")
+
+	r.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		var user User
+		Post(db, &user, w, r)
+	}).Methods("POST")
+
+	r.HandleFunc("/userssave", SaveUser(db))
+
 	// Role
 
 	// Building

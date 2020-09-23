@@ -13,11 +13,13 @@ DB_HOST=localhost
 DB_USERNAME=myusername
 DB_PASSWORD=mypassword
 DB_NAME=mybiiz
+JWT_SECRET=
 ```
 
 3. Create mysql database named `mybiiz`
+4. Generate JWT secret using `GET /generate` and put the token to `.env` `JWT_SECRET`
 
-4. Run
+5. Run
 ```
 go build
 ```
