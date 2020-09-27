@@ -11,3 +11,8 @@ type UserPostBody struct {
 	Email    string `json:"email"`
 	Name     string `json:"name"`
 }
+
+type RegisterPostBody struct {
+	User    User    `json:"user"`
+	Partner Partner `json:"partner"`
+}

@@ -44,6 +44,7 @@ func DbInit() *gorm.DB {
 		&FuelType{},
 		&Laundry{},
 		&LaundryType{},
+		&ServiceType{},
 		&User{}}
 
 	for _, table := range tables {

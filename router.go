@@ -1,17 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"net/http"
-	"os"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
-	"github.com/joho/godotenv"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func Route(r *mux.Router, dbPointer **gorm.DB) {
@@ -21,54 +16,9 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 		fmt.Fprintf(w, "Hello world!")
 	})
 
-	// Login
-	r.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		// Load secret key
-		err := godotenv.Load()
-
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		jwtSecret := os.Getenv("JWT_SECRET")
-
-		var loginBody LoginBody
-		json.NewDecoder(r.Body).Decode(&loginBody)
-
-		// fmt.Println("Decode body success")
-
-		var user User
-		if res := db.Where("email = ?", loginBody.Email).First(&user); res.Error != nil {
-			w.WriteHeader(http.StatusNotFound)
-			return
-		}
-
-		// fmt.Printf("JWT secret %s\n", jwtSecret)
-		// fmt.Println("Found user")
-
-		if notMatch := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginBody.Password)); notMatch != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		// fmt.Println("Passwrd match")
-
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"id": user.ID})
-
-		tokenString, err := token.SignedString([]byte(jwtSecret))
-
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		// fmt.Println("Token generated")
-		// fmt.Println(tokenString)
-
-		fmt.Fprintf(w, "%s", tokenString)
-	}).Methods("POST")
+	// Login & Register
+	r.HandleFunc("/login", Login(db)).Methods("POST")
+	r.HandleFunc("/register", Register(db)).Methods("POST")
 
 	// Generate secure JWT secret
 	r.HandleFunc("/generate", func(w http.ResponseWriter, r *http.Request) {
@@ -179,36 +129,14 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 		Post(db, &comingSoonEmail, w, r)
 	}).Methods("POST")
 
-	r.HandleFunc("/populate", func(w http.ResponseWriter, r *http.Request) {
-		var buildings []Building
-		buildings = []Building{
-			Building{
-				Name:    "Kost A",
-				Address: "Kost A address",
-				Phone:   "62xxx-xxxx-xxxx",
-				Lat:     "testLat",
-				Lon:     "testLon"},
-			Building{
-				Name:    "Kost B",
-				Address: "Kost B address",
-				Phone:   "62xxx-xxxx-xxxx",
-				Lat:     "testLat",
-				Lon:     "testLon"},
-			Building{
-				Name:    "Kost C",
-				Address: "Kost C address",
-				Phone:   "62xxx-xxxx-xxxx",
-				Lat:     "testLat",
-				Lon:     "testLon"},
-			Building{
-				Name:    "Kost D",
-				Address: "Kost D address",
-				Phone:   "62xxx-xxxx-xxxx",
-				Lat:     "testLat",
-				Lon:     "testLon"}}
+	// Populator
+	r.HandleFunc("/populate", Populate(db)).Methods("GET")
 
-		for _, building := range buildings {
-			db.Save(&building)
-		}
+	r.HandleFunc("/populate/servicetypes", func(w http.ResponseWriter, r *http.Request) {
+		PopulateServiceType(db)
+	}).Methods("GET")
+
+	r.HandleFunc("/populate/users", func(w http.ResponseWriter, r *http.Request) {
+		PopulateUser(db)
 	}).Methods("GET")
 }

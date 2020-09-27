@@ -16,7 +16,7 @@ type User struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Username string `json:"username"`
-	Password string `json:"-"`
+	Password string `json:"password"`
 }
 
 type Role struct {
@@ -26,23 +26,31 @@ type Role struct {
 
 type Partner struct {
 	GormModel
-	FamilyIDNumber string   `json:"familyIdNumber"`
-	FirstName      string   `json:"firstName"`
-	LastName       string   `json:"lastName"`
-	Name           string   `json:"name"`
-	Phone          string   `json:"phone"`
-	Address        string   `json:"address"`
-	Business       Business `json:"business"`
-	BusinessID     uint     `json:"businessId"`
-	City           string   `json:"city"`
-	Position       string   `json:"position"`
-	Sex            string   `json:"sex"`
-	Bank           Bank     `json:"bank"`
-	BankID         uint     `json:"bankId"`
-	BankHolderName string   `json:"bankHolderName"`
+	FamilyIDNumber string      `json:"familyIdNumber"`
+	FirstName      string      `json:"firstName"`
+	LastName       string      `json:"lastName"`
+	Name           string      `json:"name"`
+	Phone          string      `json:"phone"`
+	Address        string      `json:"address"`
+	Business       Business    `json:"business"`
+	BusinessID     uint        `json:"businessId"`
+	City           string      `json:"city"`
+	Position       string      `json:"position"`
+	Sex            string      `json:"sex"`
+	Bank           Bank        `json:"bank"`
+	BankID         uint        `json:"bankId"`
+	BankHolderName string      `json:"bankHolderName"`
+	ServiceType    ServiceType `json:"serviceType"`
+	ServiceTypeID  uint        `json:"serviceTypeId"`
+	Lat            float32     `json:"lat"`
+	Lon            float32     `json:"lon"`
+	User           User        `json:"user"`
+	UserID         uint        `json:"userId"`
+}
 
-	// Lat             string `json:"lat"`
-	// Lon             string `json:"lon"`
+type ServiceType struct {
+	GormModel
+	Name string `json:"name"`
 }
 
 type Business struct {
@@ -73,7 +81,7 @@ type Room struct {
 	Number             string           `json:"number"`
 	RoomType           RoomType         `json:"roomType"`
 	RoomTypeID         uint             `json:"roomTypeId"`
-	hasAc              bool             `json:"hasAc"`
+	HasAC              bool             `json:"hasAc"`
 	FoodAccomodation   FoodAccomodation `json:"foodAccomodation"`
 	FoodAccomodationID uint             `json:"foodAccomodationId"`
 	CancellationFee    CancellationFee  `json:"cancellationFee"`
