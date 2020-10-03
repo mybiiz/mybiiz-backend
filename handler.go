@@ -155,7 +155,7 @@ func PartnerRegisterHandler(db *gorm.DB) func(w http.ResponseWriter, r *http.Req
 			return
 		}
 
-		f, err := os.Create(fmt.Sprintf("img/user_%d.png", partnerRegister.Partner.UserID))
+		f, err := os.Create(fmt.Sprintf("img/user_%d.jpg", partnerRegister.Partner.UserID))
 		defer f.Close()
 
 		if err != nil {
