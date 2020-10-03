@@ -57,8 +57,8 @@ type ServiceType struct {
 type Business struct {
 	GormModel
 	Name        string `json:"name"`
-	Address     string `json:"address"`
-	Description string `json:"description" gorm:"text"`
+	Address     string `json:"address" gorm:"type:text"`
+	Description string `json:"description" gorm:"type:text"`
 }
 
 type Bank struct {

@@ -17,7 +17,11 @@ func main() {
 	r := mux.NewRouter()
 	Route(r, &db)
 
-	handler := cors.Default().Handler(r)
+	// handler := cors.Default().Handler(r)
+	handler := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders: []string{"*"}}).Handler(r)
 
 	fmt.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", handler)
