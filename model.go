@@ -27,26 +27,28 @@ type Role struct {
 
 type Partner struct {
 	GormModel
-	FamilyIDNumber string      `json:"familyIdNumber"`
-	FirstName      string      `json:"firstName"`
-	LastName       string      `json:"lastName"`
-	Name           string      `json:"name"`
-	Phone          string      `json:"phone"`
-	Address        string      `json:"address"`
-	Business       Business    `json:"business"`
-	BusinessID     uint        `json:"businessId"`
-	City           string      `json:"city"`
-	Position       string      `json:"position"`
-	Sex            string      `json:"sex"`
-	Bank           Bank        `json:"bank"`
-	BankID         uint        `json:"bankId"`
-	BankHolderName string      `json:"bankHolderName"`
-	ServiceType    ServiceType `json:"serviceType"`
-	ServiceTypeID  uint        `json:"serviceTypeId"`
-	Lat            float32     `json:"lat"`
-	Lon            float32     `json:"lon"`
-	User           User        `json:"user"`
-	UserID         uint        `json:"userId"`
+	FamilyIDNumber string   `json:"familyIdNumber"`
+	FirstName      string   `json:"firstName"`
+	LastName       string   `json:"lastName"`
+	Name           string   `json:"name"`
+	Phone          string   `json:"phone"`
+	Address        string   `json:"address"`
+	Business       Business `json:"business"`
+	BusinessID     uint     `json:"businessId"`
+	City           string   `json:"city"`
+	Position       string   `json:"position"`
+	Sex            string   `json:"sex"`
+	BankName       string   `json:"bankName"`
+	Bank           Bank     `json:"bank"`
+	BankID         uint     `json:"bankId"`
+	BankAccountID  string   `json:"bankAccountId"`
+	BankHolderName string   `json:"bankHolderName"`
+	// ServiceType    ServiceType `json:"serviceType"`
+	// ServiceTypeID  uint        `json:"serviceTypeId"`
+	Lat    float32 `json:"lat"`
+	Lon    float32 `json:"lon"`
+	User   User    `json:"user"`
+	UserID uint    `json:"userId"`
 }
 
 type ServiceType struct {
@@ -56,9 +58,11 @@ type ServiceType struct {
 
 type Business struct {
 	GormModel
-	Name        string `json:"name"`
-	Address     string `json:"address" gorm:"type:text"`
-	Description string `json:"description" gorm:"type:text"`
+	Name          string      `json:"name"`
+	Address       string      `json:"address" gorm:"type:text"`
+	Description   string      `json:"description" gorm:"type:text"`
+	ServiceType   ServiceType `json:"serviceType"`
+	ServiceTypeID uint        `json:"serviceTypeId"`
 }
 
 type Bank struct {

@@ -17,10 +17,10 @@ func Populate(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 func PopulateServiceType(db *gorm.DB) {
 	serviceTypes := []ServiceType{
 		ServiceType{Name: "Hotel"},
-		ServiceType{Name: "Apartment"},
-		ServiceType{Name: "Boarding House"},
+		ServiceType{Name: "Apartemen"},
+		ServiceType{Name: "Kost"},
 		ServiceType{Name: "Laundry"},
-		ServiceType{Name: "Car Rent"}}
+		ServiceType{Name: "Rental Mobil"}}
 
 	for _, serviceType := range serviceTypes {
 		db.Save(&serviceType)

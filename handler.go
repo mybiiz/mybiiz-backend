@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -32,6 +34,7 @@ func Post(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Request
 	json.NewDecoder(r.Body).Decode(table)
 	db.Save(table)
 	json.NewEncoder(w).Encode(table)
+	// w.WriteHeader(http.StatusCreated)
 }
 
 func Delete(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Request) {
@@ -130,5 +133,59 @@ func Register(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("User dengan email ini sudah terdaftar."))
 		}
+	}
+}
+
+func PartnerRegisterHandler(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var partnerRegister PartnerRegister
+		json.NewDecoder(r.Body).Decode(&partnerRegister)
+		// fmt.Println(partnerRegister)
+
+		// Remove data:image/jpeg;base64,
+		b64Split := strings.Split(partnerRegister.CitizenIDPhoto, "base64,")
+
+		// fmt.Println(b64Split)
+
+		imgDec, err := base64.StdEncoding.DecodeString(b64Split[1])
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "Failed converting citizen ID Photo.")
+			return
+		}
+
+		f, err := os.Create(fmt.Sprintf("img/user_%d.png", partnerRegister.Partner.UserID))
+		defer f.Close()
+
+		if err != nil {
+			fmt.Println("Error opening file.")
+		}
+
+		f.Write(imgDec)
+		f.Sync()
+
+		// Save business first
+		if res := db.Save(&partnerRegister.Partner.Business); res.Error != nil {
+			fmt.Println("Failed saving business")
+			return
+		}
+
+		partnerRegister.Partner.BusinessID = partnerRegister.Partner.Business.ID
+		fmt.Println("Saved business ID:", partnerRegister.Partner.Business.ID)
+		fmt.Println("User ID:", partnerRegister.Partner.UserID)
+
+		// Modify user registration completed
+		var user User
+		if res := db.Where("id = ?", partnerRegister.Partner.UserID).First(&user); res.Error != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "%s", res.Error)
+			return
+		}
+
+		user.RegistrationCompleted = true
+		db.Save(&user)
+
+		db.Save(&partnerRegister.Partner)
 	}
 }
