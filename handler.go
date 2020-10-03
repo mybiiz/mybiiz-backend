@@ -189,3 +189,12 @@ func PartnerRegisterHandler(db *gorm.DB) func(w http.ResponseWriter, r *http.Req
 		db.Save(&partnerRegister.Partner)
 	}
 }
+
+func PartnersView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		var partners []Partner
+		db.Preload("Business.ServiceType").Preload("User").Find(&partners)
+		json.NewEncoder(w).Encode(&partners)
+	}
+}

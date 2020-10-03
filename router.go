@@ -100,6 +100,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	}).Methods("POST")
 
 	r.HandleFunc("/partnersregister", PartnerRegisterHandler(db))
+	r.HandleFunc("/partnersview", PartnersView(db)).Methods("GET")
 
 	// Businesses
 	r.HandleFunc("/businesses", func(w http.ResponseWriter, r *http.Request) {
