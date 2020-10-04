@@ -13,11 +13,12 @@ type GormModel struct {
 
 type User struct {
 	GormModel
-	Name                  string `json:"name"`
-	Email                 string `json:"email"`
-	Username              string `json:"username"`
-	Password              string `json:"password"`
-	RegistrationCompleted bool   `json:"registrationCompleted"`
+	Name                  string    `json:"name"`
+	Email                 string    `json:"email"`
+	Username              string    `json:"username"`
+	Password              string    `json:"password"`
+	RegistrationCompleted bool      `json:"registrationCompleted"`
+	Partners              []Partner `json:"partners"`
 }
 
 type Role struct {

@@ -198,3 +198,13 @@ func PartnersView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(&partners)
 	}
 }
+
+func ViewUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := mux.Vars(r)["id"]
+		w.Header().Set("content-type", "application/json")
+		var user User
+		db.Where("id = ?", id).Preload("Partners.Business.ServiceType").Find(&user)
+		json.NewEncoder(w).Encode(&user)
+	}
+}
