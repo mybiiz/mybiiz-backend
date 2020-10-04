@@ -125,9 +125,9 @@ func Register(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 			registerPostBody.User.Password = string(generatedPassword)
 
 			db.Save(&registerPostBody.User)
-			registerPostBody.Partner.UserID = registerPostBody.User.ID
+			// registerPostBody.Partner.UserID = registerPostBody.User.ID
 
-			db.Save(&registerPostBody.Partner)
+			// db.Save(&registerPostBody.Partner)
 
 		} else { // existing user found
 			w.WriteHeader(http.StatusInternalServerError)
