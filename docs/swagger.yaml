@@ -1,0 +1,168 @@
+basePath: /v2
+definitions:
+  main.Bank:
+    properties:
+      code:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.Business:
+    properties:
+      address:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      serviceType:
+        $ref: '#/definitions/main.ServiceType'
+        type: object
+      serviceTypeId:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  main.Partner:
+    properties:
+      address:
+        type: string
+      bank:
+        $ref: '#/definitions/main.Bank'
+        type: object
+      bankAccountId:
+        type: string
+      bankHolderName:
+        type: string
+      bankId:
+        type: integer
+      bankName:
+        type: string
+      business:
+        $ref: '#/definitions/main.Business'
+        type: object
+      businessId:
+        type: integer
+      city:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      familyIdNumber:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      lat:
+        description: |-
+          ServiceType    ServiceType `json:"serviceType"`
+          ServiceTypeID  uint        `json:"serviceTypeId"`
+        type: number
+      lon:
+        type: number
+      name:
+        type: string
+      phone:
+        type: string
+      position:
+        type: string
+      sex:
+        type: string
+      updatedAt:
+        type: string
+      user:
+        $ref: '#/definitions/main.User'
+        type: object
+      userId:
+        type: integer
+    type: object
+  main.ServiceType:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      partners:
+        items:
+          $ref: '#/definitions/main.Partner'
+        type: array
+      password:
+        type: string
+      registrationCompleted:
+        type: boolean
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+host: mybiiz.swagger.io
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is the api doc for MyBiiz Backend.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: MyBiiz Backend
+  version: "1.0"
+paths:
+  /partners/:
+    get:
+      consumes:
+      - application/json
+      operationId: partners
+      parameters:
+      - description: Some ID
+        in: path
+        name: some_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Partner'
+      summary: Get all partners
+swagger: "2.0"

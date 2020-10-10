@@ -9,6 +9,20 @@ import (
 	"github.com/rs/cors"
 )
 
+// @title MyBiiz Backend
+// @version 1.0
+// @description This is the api doc for MyBiiz Backend.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host mybiiz.swagger.io
+// @BasePath /v2
 func main() {
 	fmt.Println("Hello wolrd!")
 
@@ -27,6 +41,4 @@ func main() {
 	http.ListenAndServe(":8080", handler)
 
 	defer db.Close()
-
-	// r := mux.NewRouter()
 }

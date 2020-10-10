@@ -7,8 +7,18 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
+	_ "github.com/mybiiz/mybiiz-backend/docs"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+// Route partners
+// @Summary Get all partners
+// @ID partners
+// @Accept  json
+// @Produce  json
+// @Param   some_id      path   int     true  "Some ID"
+// @Success 200 {object} Partner
+// @Router /partners/ [get]
 func Route(r *mux.Router, dbPointer **gorm.DB) {
 	db := *dbPointer
 
@@ -80,11 +90,25 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	}).Methods("POST")
 
 	// Partner
+	// ShowPartners godoc
+	// @Summary show partners
+	// @Router /partners [get]
+	// @Produce json
 	r.HandleFunc("/partners", func(w http.ResponseWriter, r *http.Request) {
 		var partners []Partner
 		All(db, &partners, w, r)
 	}).Methods("GET")
 
+	// GetStringByInt example
+	// @Summary Add a new pet to the store
+	// @Description get string by ID
+	// @ID get-string-by-int
+	// @Accept  json
+	// @Produce  json
+	// @Param   some_id      path   int     true  "Some ID"
+	// @Success 200 {string} string	"ok"
+	// @Router /testapi/get-string-by-int/{some_id} [get]
+	// @Router /accounts/{id} [get]
 	r.HandleFunc("/partners/{id}", func(w http.ResponseWriter, r *http.Request) {
 		var partner Partner
 		Get(db, &partner, w, r)
@@ -102,7 +126,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 
 	r.HandleFunc("/partnersregister", PartnerRegisterHandler(db))
 	r.HandleFunc("/partnersview", PartnersView(db)).Methods("GET")
-  r.HandleFunc("/partners/{id}/view", PartnerView(db)).Methods("GET")
+	r.HandleFunc("/partners/{id}/view", PartnerView(db)).Methods("GET")
 
 	// Businesses
 	r.HandleFunc("/businesses", func(w http.ResponseWriter, r *http.Request) {
@@ -153,7 +177,10 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 		PopulateServiceType(db)
 	}).Methods("GET")
 
-	r.HandleFunc("/populate/users", func(w http.ResponseWriter, r *http.Request) {
-		PopulateUser(db)
-	}).Methods("GET")
+	r.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:8080/swagger/doc.json"), //The url pointing to API definition
+		httpSwagger.DeepLinking(true),
+		httpSwagger.DocExpansion("none"),
+		httpSwagger.DomID("#swagger-ui"),
+	))
 }
