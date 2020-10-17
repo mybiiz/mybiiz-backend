@@ -1,4 +1,4 @@
-basePath: /v2
+basePath: /
 definitions:
   main.Bank:
     properties:
@@ -11,6 +11,27 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.Building:
+    properties:
+      address:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      lat:
+        type: string
+      lon:
+        type: string
+      name:
+        type: string
+      phone:
         type: string
       updatedAt:
         type: string
@@ -132,29 +153,49 @@ definitions:
       username:
         type: string
     type: object
-host: mybiiz.swagger.io
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
+  contact: {}
   description: This is the api doc for MyBiiz Backend.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
+  license: {}
   title: MyBiiz Backend
   version: "1.0"
 paths:
-  /partners/:
+  /buildings:
     get:
-      consumes:
+      produces:
       - application/json
-      operationId: partners
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Building'
+              type: array
+            type: array
+      summary: All Buildings
+    post:
       parameters:
-      - description: Some ID
+      - description: Building
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.Building'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Building'
+      summary: Post Building
+  /buildings/{id}:
+    delete:
+      parameters:
+      - description: ID
         in: path
-        name: some_id
+        name: id
         required: true
         type: integer
       produces:
@@ -163,6 +204,82 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.Partner'
-      summary: Get all partners
+            $ref: '#/definitions/main.Building'
+      summary: Delete Building
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Building'
+      summary: Get Building
+  /users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.User'
+              type: array
+            type: array
+      summary: All Users
+  /users/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+      summary: Delete User
+    get:
+      parameters:
+      - description: Some ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+      summary: Get User
+    post:
+      parameters:
+      - description: User
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+      summary: Post User
 swagger: "2.0"

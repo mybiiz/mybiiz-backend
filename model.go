@@ -69,7 +69,7 @@ type Business struct {
 type Bank struct {
 	GormModel
 	Name string `json:"name"`
-	Code uint   `json:"code"`
+	Code string `json:"code"`
 }
 
 type Building struct {
