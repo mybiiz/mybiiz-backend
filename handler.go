@@ -61,6 +61,7 @@ func Delete(db *gorm.DB, table interface{}) func(w http.ResponseWriter, r *http.
 
 // AllUsers endpoint
 // @Summary All Users
+// @Tags users
 // @Produce  json
 // @Success 200 {array} []User
 // @Router /users [get]
@@ -71,6 +72,7 @@ func AllUsers(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // GetUser endpoint
 // @Summary Get User
+// @Tags users
 // @Produce  json
 // @Param   id      path   int     true  "Some ID"
 // @Success 200 {object} User
@@ -82,6 +84,7 @@ func GetUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // DeleteUser endpoint
 // @Summary Delete User
+// @Tags users
 // @Produce  json
 // @Param   id      path   int     true  "ID"
 // @Success 200 {object} User
@@ -93,6 +96,7 @@ func DeleteUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // PostUser endpoint
 // @Summary Post User
+// @Tags users
 // @Produce  json
 // @Param   body      body  User     true "User"
 // @Success 200 {object} User
@@ -106,6 +110,7 @@ func PostUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // AllBuildings endpoint
 // @Summary All Buildings
+// @Tags buildings
 // @Produce  json
 // @Success 200 {array} []Building
 // @Router /buildings [get]
@@ -116,6 +121,7 @@ func AllBuildings(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // GetBuilding endpoint
 // @Summary Get Building
+// @Tags buildings
 // @Produce  json
 // @Param   id      path   int     true  "ID"
 // @Success 200 {object} Building
@@ -127,6 +133,7 @@ func GetBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // DeleteBuilding endpoint
 // @Summary Delete Building
+// @Tags buildings
 // @Produce  json
 // @Param   id      path   int     true  "ID"
 // @Success 200 {object} Building
@@ -138,6 +145,7 @@ func DeleteBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // PostBuilding endpoint
 // @Summary Post Building
+// @Tags buildings
 // @Produce  json
 // @Param   body      body  Building     true "Building"
 // @Success 200 {object} Building
@@ -147,19 +155,61 @@ func PostBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return Post(db, &building)
 }
 
+// AllBanks endpoint
+// @Summary All Banks
+// @Tags banks
+// @Produce  json
+// @Success 200 {array} []Bank
+// @Router /banks [get]
+func AllBanks(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	var banks []Bank
+	return All(db, &banks)
+}
+
 // Role
+
+// AllRoles endpoint
+// @Summary All Roles
+// @Tags roles
+// @Produce  json
+// @Success 200 {array} []Role
+// @Router /roles [get]
 func AllRoles(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var roles []Role
 	return All(db, &roles)
 }
+
+// GetRole endpoint
+// @Summary Get Role
+// @Tags roles
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Role
+// @Router /roles/{id} [get]
 func GetRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var role Role
 	return Get(db, &role)
 }
+
+// DeleteRole endpoint
+// @Summary Delete Role
+// @Tags roles
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Role
+// @Router /roles/{id} [delete]
 func DeleteRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var role Role
 	return Delete(db, &role)
 }
+
+// PostRole endpoint
+// @Summary Post Role
+// @Tags roles
+// @Produce  json
+// @Param   body      body  Role     true "Role"
+// @Success 200 {object} Role
+// @Router /roles [post]
 func PostRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var role Role
 	return Post(db, &role)
@@ -168,18 +218,47 @@ func PostRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // Partners
 
 // AllPartners endpoint
+// @Summary All Partners
+// @Tags partners
+// @Produce  json
+// @Success 200 {array} []Role
+// @Router /partners [get]
 func AllPartners(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var partners []Partner
 	return All(db, &partners)
 }
+
+// GetPartner endpoint
+// @Summary Get Partner
+// @Tags partners
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Partner
+// @Router /partners/{id} [get]
 func GetPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var partner Partner
 	return Get(db, &partner)
 }
+
+// DeletePartner endpoint
+// @Summary Delete Partner
+// @Tags partners
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Partner
+// @Router /partners/{id} [delete]
 func DeletePartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var partner Partner
 	return Delete(db, &partner)
 }
+
+// PostPartner endpoint
+// @Summary Post Partner
+// @Tags partners
+// @Produce  json
+// @Param   body      body  Partner     true "Partner"
+// @Success 200 {object} Partner
+// @Router /partners [post]
 func PostPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var partner Partner
 	return Post(db, &partner)
@@ -188,18 +267,49 @@ func PostPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // Businesses
 
 // AllBusinesses endpoint
+
+// AllBusinesses endpoint
+// @Summary All Businesses
+// @Tags businesses
+// @Produce  json
+// @Success 200 {array} []Business
+// @Router /businesses [get]
 func AllBusinesses(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var businesses []Business
 	return All(db, &businesses)
 }
+
+// GetBusiness endpoint
+// @Summary Get Business
+// @Tags businesses
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Business
+// @Router /businesses/{id} [get]
 func GetBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var business Business
 	return Get(db, &business)
 }
+
+// DeleteBusiness endpoint
+// @Summary Delete Business
+// @Tags businesses
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Business
+// @Router /businesses/{id} [delete]
 func DeleteBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var business Business
 	return Delete(db, &business)
 }
+
+// PostBusiness endpoint
+// @Summary Post Business
+// @Tags businesses
+// @Produce  json
+// @Param   body      body  Business     true "Business"
+// @Success 200 {object} Business
+// @Router /businesses [post]
 func PostBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var business Business
 	return Post(db, &business)
@@ -208,18 +318,47 @@ func PostBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // ServiceType
 
 // AllServiceTypes endpoint
+// @Summary All Service Types
+// @Tags servicetypes
+// @Produce  json
+// @Success 200 {array} []ServiceType
+// @Router /servicetypes [get]
 func AllServiceTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var serviceTypes []ServiceType
 	return All(db, &serviceTypes)
 }
+
+// GetServiceType endpoint
+// @Summary Get Service Types
+// @Tags servicetypes
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Business
+// @Router /servicetypes/{id} [get]
 func GetServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var serviceType ServiceType
 	return Get(db, &serviceType)
 }
+
+// DeleteServiceType endpoint
+// @Summary Delete Service Type
+// @Tags servicetypes
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} ServiceType
+// @Router /servicetypes/{id} [delete]
 func DeleteServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var serviceType ServiceType
 	return Delete(db, &serviceType)
 }
+
+// PostServiceType endpoint
+// @Summary Post Service Type
+// @Tags servicetypes
+// @Produce  json
+// @Param   body      body  ServiceType     true "Service Type"
+// @Success 200 {object} ServiceType
+// @Router /servicetype [post]
 func PostServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var serviceType ServiceType
 	return Post(db, &serviceType)
@@ -228,18 +367,47 @@ func PostServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // Room
 
 // AllRooms endpoint
+// @Summary All Rooms
+// @Tags rooms
+// @Produce  json
+// @Success 200 {array} []Room
+// @Router /rooms [get]
 func AllRooms(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var rooms []Room
 	return All(db, &rooms)
 }
+
+// GetRoom endpoint
+// @Summary Get Room
+// @Tags rooms
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Room
+// @Router /rooms/{id} [get]
 func GetRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var room Room
 	return Get(db, &room)
 }
+
+// DeleteRoom endpoint
+// @Summary Delete Room
+// @Tags rooms
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Room
+// @Router /rooms/{id} [delete]
 func DeleteRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var room Room
 	return Delete(db, &room)
 }
+
+// PostRoom endpoint
+// @Summary Post Room
+// @Tags rooms
+// @Produce  json
+// @Param   body      body  Room     true "Room"
+// @Success 200 {object} Room
+// @Router /rooms [post]
 func PostRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var room Room
 	return Post(db, &room)
@@ -248,23 +416,58 @@ func PostRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // ComingSoonEmails
 
 // AllComingSoonEmails endpoint
+// @Summary All Coming Soon Emails
+// @Tags comingsoonemails
+// @Produce  json
+// @Success 200 {array} []ComingSoonEmail
+// @Router /coming-soon-emails [get]
 func AllComingSoonEmails(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var comingSoonEmails []ComingSoonEmail
 	return All(db, &comingSoonEmails)
 }
+
+// GetComingSoonEmail endpoint
+// @Summary Get Coming Soon Email
+// @Tags comingsoonemails
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} ComingSoonEmail
+// @Router /coming-soon-emails/{id} [get]
 func GetComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var comingSoonEmail ComingSoonEmail
 	return Get(db, &comingSoonEmail)
 }
+
+// DeleteComingSoonEmail endpoint
+// @Summary Delete Coming Soon Email
+// @Tags comingsoonemails
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} ComingSoonEmail
+// @Router /coming-soon-emails/{id} [delete]
 func DeleteComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var comingSoonEmail ComingSoonEmail
 	return Delete(db, &comingSoonEmail)
 }
+
+// PostComingSoonEmail endpoint
+// @Summary Post Coming Soon Email
+// @Tags comingsoonemails
+// @Produce  json
+// @Param   body      body  ComingSoonEmail     true "Room"
+// @Success 200 {object} ComingSoonEmail
+// @Router /coming-soon-emails [post]
 func PostComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	var comingSoonEmail ComingSoonEmail
 	return Post(db, &comingSoonEmail)
 }
 
+// Login endpoint
+// @Summary Login
+// @Tags auth
+// @Param   body      body  LoginBody     true "Login body"
+// @Success 200 {string} string "jwt"
+// @Router /login [post]
 func Login(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Load secret key
@@ -315,6 +518,11 @@ func Login(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GenerateJwt endpoint
+// @Summary Generate secure JWT key
+// @Tags auth
+// @Success 200 {string} string	"ok"
+// @Router /generate [get]
 func GenerateJwt(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
@@ -328,6 +536,12 @@ func GenerateJwt(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// SaveUser endpoint
+// @Summary Save User
+// @Tags users
+// @Param   body      body  UserPostBody     true "UserPostBody"
+// @Success 200 {object} string "ok"
+// @Router /userssave [post]
 func SaveUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var userPostBody UserPostBody
@@ -346,6 +560,12 @@ func SaveUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Register endpoint
+// @Summary Register
+// @Tags auth
+// @Param   body      body  RegisterPostBody     true "RegisterPostBody"
+// @Success 200 {string} string "ok"
+// @Router /register [post]
 func Register(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var registerPostBody RegisterPostBody
@@ -371,6 +591,12 @@ func Register(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// PartnerRegisterHandler endpoint
+// @Summary PartnerRegisterHandler
+// @Tags partners
+// @Param   body      body PartnerRegister     true "PartnerRegister body"
+// @Success 200 {string} string "ok"
+// @Router /login [post]
 func PartnerRegisterHandler(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var partnerRegister PartnerRegister
@@ -425,6 +651,12 @@ func PartnerRegisterHandler(db *gorm.DB) func(w http.ResponseWriter, r *http.Req
 	}
 }
 
+// PartnersView endpoint
+// @Summary All Roles
+// @Tags partners
+// @Produce  json
+// @Success 200 {array} []Role
+// @Router /partnersview [get]
 func PartnersView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-type", "application/json")
@@ -434,6 +666,13 @@ func PartnersView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// PartnerView endpoint
+// @Summary Get Partner View
+// @Produce  json
+// @Tags partners
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} Partner
+// @Router /partners/{id}/view [get]
 func PartnerView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-type", "application/json")
@@ -444,6 +683,13 @@ func PartnerView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ViewUser endpoint
+// @Summary Get User view
+// @Tags users
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} User
+// @Router /users/{id}/view [get]
 func ViewUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := mux.Vars(r)["id"]
@@ -452,4 +698,48 @@ func ViewUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		db.Where("id = ?", id).Preload("Partners.Business.ServiceType").Find(&user)
 		json.NewEncoder(w).Encode(&user)
 	}
+}
+
+// AllRoomTypes endpoint
+// @Summary AllRoomTypes
+// @Tags rooms_additions
+// @Produce  json
+// @Success 200 {array} []RoomType
+// @Router /roomtypes [get]
+func AllRoomTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	var roomTypes []RoomType
+	return All(db, &roomTypes)
+}
+
+// AllFoodAccomodations endpoint
+// @Summary AllRoomTypes
+// @Tags rooms_additions
+// @Produce  json
+// @Success 200 {array} []FoodAccomodation
+// @Router /foodaccomodations [get]
+func AllFoodAccomodations(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	var foodAccomodations []FoodAccomodation
+	return All(db, &foodAccomodations)
+}
+
+// AllCancellationFees endpoint
+// @Summary AllCancellationFees
+// @Tags rooms_additions
+// @Produce  json
+// @Success 200 {array} []CancellationFee
+// @Router /cancellationfees [get]
+func AllCancellationFees(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	var cancellationFees []CancellationFee
+	return All(db, &cancellationFees)
+}
+
+// AllGuestTypes endpoint
+// @Summary AllGuestTypes
+// @Tags rooms_additions
+// @Produce  json
+// @Success 200 {array} []GuestType
+// @Router /guesttypes [get]
+func AllGuestTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	var guestTypes []GuestType
+	return All(db, &guestTypes)
 }

@@ -50,6 +50,7 @@ type Partner struct {
 	Lon    float32 `json:"lon"`
 	User   User    `json:"user"`
 	UserID uint    `json:"userId"`
+	Rooms  []Room  `json:"room"`
 }
 
 type ServiceType struct {
@@ -64,6 +65,7 @@ type Business struct {
 	Description   string      `json:"description" gorm:"type:text"`
 	ServiceType   ServiceType `json:"serviceType"`
 	ServiceTypeID uint        `json:"serviceTypeId"`
+	Rooms         []Room      `json:"rooms"`
 }
 
 type Bank struct {
@@ -91,11 +93,14 @@ type Room struct {
 	FoodAccomodation   FoodAccomodation `json:"foodAccomodation"`
 	FoodAccomodationID uint             `json:"foodAccomodationId"`
 	CancellationFee    CancellationFee  `json:"cancellationFee"`
+	CancellationFeeID  uint             `json:"cancellationFeeId"`
 	BedCapacity        uint             `json:"bedCapacity"`
 	GuestType          GuestType        `json:"guestType"`
-	GuestTypeID        uint             `json:"guestTypeId`
+	GuestTypeID        uint             `json:"guestTypeId"`
 	Price              uint             `json:"price"`
 	Description        string           `json:"description" gorm:"type:text"`
+	BusinessID         uint             `json:"businessId"`
+	Business           Business         `json:"business"`
 }
 
 type GuestType struct {

@@ -3,7 +3,7 @@ definitions:
   main.Bank:
     properties:
       code:
-        type: integer
+        type: string
       createdAt:
         type: string
       deletedAt:
@@ -50,12 +50,75 @@ definitions:
         type: integer
       name:
         type: string
+      rooms:
+        items:
+          $ref: '#/definitions/main.Room'
+        type: array
       serviceType:
         $ref: '#/definitions/main.ServiceType'
         type: object
       serviceTypeId:
         type: integer
       updatedAt:
+        type: string
+    type: object
+  main.CancellationFee:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.ComingSoonEmail:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  main.FoodAccomodation:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.GuestType:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.LoginBody:
+    properties:
+      email:
+        type: string
+      password:
         type: string
     type: object
   main.Partner:
@@ -105,6 +168,10 @@ definitions:
         type: string
       position:
         type: string
+      room:
+        items:
+          $ref: '#/definitions/main.Room'
+        type: array
       sex:
         type: string
       updatedAt:
@@ -114,6 +181,97 @@ definitions:
         type: object
       userId:
         type: integer
+    type: object
+  main.PartnerRegister:
+    properties:
+      citizenIdPhoto:
+        type: string
+      partner:
+        $ref: '#/definitions/main.Partner'
+        type: object
+    type: object
+  main.RegisterPostBody:
+    properties:
+      partner:
+        $ref: '#/definitions/main.Partner'
+        type: object
+      user:
+        $ref: '#/definitions/main.User'
+        type: object
+    type: object
+  main.Role:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.Room:
+    properties:
+      bedCapacity:
+        type: integer
+      business:
+        $ref: '#/definitions/main.Business'
+        type: object
+      businessId:
+        type: integer
+      cancellationFee:
+        $ref: '#/definitions/main.CancellationFee'
+        type: object
+      cancellationFeeId:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      foodAccomodation:
+        $ref: '#/definitions/main.FoodAccomodation'
+        type: object
+      foodAccomodationId:
+        type: integer
+      guestType:
+        $ref: '#/definitions/main.GuestType'
+        type: object
+      guestTypeId:
+        type: integer
+      hasAc:
+        type: boolean
+      id:
+        type: integer
+      name:
+        type: string
+      number:
+        type: string
+      price:
+        type: integer
+      roomType:
+        $ref: '#/definitions/main.RoomType'
+        type: object
+      roomTypeId:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  main.RoomType:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
     type: object
   main.ServiceType:
     properties:
@@ -153,6 +311,17 @@ definitions:
       username:
         type: string
     type: object
+  main.UserPostBody:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is the api doc for MyBiiz Backend.
@@ -160,6 +329,22 @@ info:
   title: MyBiiz Backend
   version: "1.0"
 paths:
+  /banks:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Bank'
+              type: array
+            type: array
+      summary: All Banks
+      tags:
+      - banks
   /buildings:
     get:
       produces:
@@ -174,6 +359,8 @@ paths:
               type: array
             type: array
       summary: All Buildings
+      tags:
+      - buildings
     post:
       parameters:
       - description: Building
@@ -190,6 +377,8 @@ paths:
           schema:
             $ref: '#/definitions/main.Building'
       summary: Post Building
+      tags:
+      - buildings
   /buildings/{id}:
     delete:
       parameters:
@@ -206,6 +395,8 @@ paths:
           schema:
             $ref: '#/definitions/main.Building'
       summary: Delete Building
+      tags:
+      - buildings
     get:
       parameters:
       - description: ID
@@ -221,6 +412,565 @@ paths:
           schema:
             $ref: '#/definitions/main.Building'
       summary: Get Building
+      tags:
+      - buildings
+  /businesses:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Business'
+              type: array
+            type: array
+      summary: All Businesses
+      tags:
+      - businesses
+    post:
+      parameters:
+      - description: Business
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.Business'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Business'
+      summary: Post Business
+      tags:
+      - businesses
+  /businesses/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Business'
+      summary: Delete Business
+      tags:
+      - businesses
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Business'
+      summary: Get Business
+      tags:
+      - businesses
+  /cancellationfees:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.CancellationFee'
+              type: array
+            type: array
+      summary: AllCancellationFees
+      tags:
+      - rooms_additions
+  /coming-soon-emails:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.ComingSoonEmail'
+              type: array
+            type: array
+      summary: All Coming Soon Emails
+      tags:
+      - comingsoonemails
+    post:
+      parameters:
+      - description: Room
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.ComingSoonEmail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ComingSoonEmail'
+      summary: Post Coming Soon Email
+      tags:
+      - comingsoonemails
+  /coming-soon-emails/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ComingSoonEmail'
+      summary: Delete Coming Soon Email
+      tags:
+      - comingsoonemails
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ComingSoonEmail'
+      summary: Get Coming Soon Email
+      tags:
+      - comingsoonemails
+  /foodaccomodations:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.FoodAccomodation'
+              type: array
+            type: array
+      summary: AllRoomTypes
+      tags:
+      - rooms_additions
+  /generate:
+    get:
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Generate secure JWT key
+      tags:
+      - auth
+  /guesttypes:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.GuestType'
+              type: array
+            type: array
+      summary: AllGuestTypes
+      tags:
+      - rooms_additions
+  /login:
+    post:
+      parameters:
+      - description: PartnerRegister body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.PartnerRegister'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: PartnerRegisterHandler
+      tags:
+      - partners
+  /partners:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Role'
+              type: array
+            type: array
+      summary: All Partners
+      tags:
+      - partners
+    post:
+      parameters:
+      - description: Partner
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.Partner'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Partner'
+      summary: Post Partner
+      tags:
+      - partners
+  /partners/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Partner'
+      summary: Delete Partner
+      tags:
+      - partners
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Partner'
+      summary: Get Partner
+      tags:
+      - partners
+  /partners/{id}/view:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Partner'
+      summary: Get Partner View
+      tags:
+      - partners
+  /partnersview:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Role'
+              type: array
+            type: array
+      summary: All Roles
+      tags:
+      - partners
+  /register:
+    post:
+      parameters:
+      - description: RegisterPostBody
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.RegisterPostBody'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Register
+      tags:
+      - auth
+  /roles:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Role'
+              type: array
+            type: array
+      summary: All Roles
+      tags:
+      - roles
+    post:
+      parameters:
+      - description: Role
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.Role'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Role'
+      summary: Post Role
+      tags:
+      - roles
+  /roles/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Role'
+      summary: Delete Role
+      tags:
+      - roles
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Role'
+      summary: Get Role
+      tags:
+      - roles
+  /rooms:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Room'
+              type: array
+            type: array
+      summary: All Rooms
+      tags:
+      - rooms
+    post:
+      parameters:
+      - description: Room
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.Room'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Room'
+      summary: Post Room
+      tags:
+      - rooms
+  /rooms/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Room'
+      summary: Delete Room
+      tags:
+      - rooms
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Room'
+      summary: Get Room
+      tags:
+      - rooms
+  /roomtypes:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.RoomType'
+              type: array
+            type: array
+      summary: AllRoomTypes
+      tags:
+      - rooms_additions
+  /servicetype:
+    post:
+      parameters:
+      - description: Service Type
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.ServiceType'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ServiceType'
+      summary: Post Service Type
+      tags:
+      - servicetypes
+  /servicetypes:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.ServiceType'
+              type: array
+            type: array
+      summary: All Service Types
+      tags:
+      - servicetypes
+  /servicetypes/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.ServiceType'
+      summary: Delete Service Type
+      tags:
+      - servicetypes
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Business'
+      summary: Get Service Types
+      tags:
+      - servicetypes
   /users:
     get:
       produces:
@@ -235,6 +985,8 @@ paths:
               type: array
             type: array
       summary: All Users
+      tags:
+      - users
   /users/{id}:
     delete:
       parameters:
@@ -251,6 +1003,8 @@ paths:
           schema:
             $ref: '#/definitions/main.User'
       summary: Delete User
+      tags:
+      - users
     get:
       parameters:
       - description: Some ID
@@ -266,6 +1020,8 @@ paths:
           schema:
             $ref: '#/definitions/main.User'
       summary: Get User
+      tags:
+      - users
     post:
       parameters:
       - description: User
@@ -282,4 +1038,41 @@ paths:
           schema:
             $ref: '#/definitions/main.User'
       summary: Post User
+      tags:
+      - users
+  /users/{id}/view:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.User'
+      summary: Get User view
+      tags:
+      - users
+  /userssave:
+    post:
+      parameters:
+      - description: UserPostBody
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.UserPostBody'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Save User
+      tags:
+      - users
 swagger: "2.0"

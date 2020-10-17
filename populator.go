@@ -62,6 +62,54 @@ func Populate(db *gorm.DB) {
 		}
 	}
 
+	// Populate FoodAccomodation
+	fmt.Println("Populating food accomodations...")
+	foodAccomodations := []FoodAccomodation{
+		FoodAccomodation{Name: "Gratis Sarapan"},
+		FoodAccomodation{Name: "Gratis Dinner"},
+		FoodAccomodation{Name: "Gratis Sarapan & Dinner"},
+		FoodAccomodation{Name: "Gratis Jamuan"},
+		FoodAccomodation{Name: "Gratis Tidak ada makanan"}}
+
+	for _, foodAccomodation := range foodAccomodations {
+		var foundFoodAccomodation FoodAccomodation
+		if res := db.Where("name = ?", foodAccomodation.Name).First(&foundFoodAccomodation); res.Error != nil {
+			fmt.Println(foodAccomodation.Name, "not found! Creating...")
+			db.Save(&foodAccomodation)
+		}
+	}
+
+	// Populate CancellationFee
+	fmt.Println("Populating cancellation fee...")
+	cancellationFees := []CancellationFee{
+		CancellationFee{Name: "Gratis"},
+		CancellationFee{Name: "10% sebelum 24 jam"},
+		CancellationFee{Name: "Tidak Bisa Cancel"}}
+
+	for _, cancellationFee := range cancellationFees {
+		var foundCancellationFee CancellationFee
+		if res := db.Where("name = ?", cancellationFee.Name).First(&foundCancellationFee); res.Error != nil {
+			fmt.Println(cancellationFee.Name, "not found! Creating...")
+			db.Save(&cancellationFee)
+		}
+	}
+
+	// Populate GuestType
+	fmt.Println("Populating guest type...")
+	guestTypes := []GuestType{
+		GuestType{Name: "Perempuan"},
+		GuestType{Name: "Laki-Laki"},
+		GuestType{Name: "Campur"},
+		GuestType{Name: "Tidak Ada Ketentuan"}}
+
+	for _, guestType := range guestTypes {
+		var foundGuestType GuestType
+		if res := db.Where("name = ?", guestType.Name).First(&foundGuestType); res.Error != nil {
+			fmt.Println(guestType.Name, "not found! Creating...")
+			db.Save(&guestType)
+		}
+	}
+
 	// Populate banks
 	fmt.Println("Populating banks...")
 

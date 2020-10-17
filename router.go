@@ -49,7 +49,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	r.HandleFunc("/partners/{id}", GetPartner(db)).Methods("GET")
 	r.HandleFunc("/partners/{id}", DeletePartner(db)).Methods("DELETE")
 	r.HandleFunc("/partners", PostPartner(db)).Methods("POST")
-	r.HandleFunc("/partnersregister", PartnerRegisterHandler(db))
+	r.HandleFunc("/partnersregister", PartnerRegisterHandler(db)).Methods("POST")
 	r.HandleFunc("/partnersview", PartnersView(db)).Methods("GET")
 	r.HandleFunc("/partners/{id}/view", PartnerView(db)).Methods("GET")
 
@@ -76,6 +76,21 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	r.HandleFunc("/coming-soon-emails/{id}", GetComingSoonEmail(db)).Methods("GET")
 	r.HandleFunc("/coming-soon-emails/{id}", DeleteComingSoonEmail(db)).Methods("DELETE")
 	r.HandleFunc("/coming-soon-emails", PostComingSoonEmail(db)).Methods("POST")
+
+	// Bank (read-only)
+	r.HandleFunc("/banks", AllBanks(db)).Methods("GET")
+
+	// Room types (read-only)
+	r.HandleFunc("/roomtypes", AllRoomTypes(db)).Methods("GET")
+
+	// Food Accomodation (read-only)
+	r.HandleFunc("/roomtypes", AllFoodAccomodations(db)).Methods("GET")
+
+	// Cancellation Fee (read-only)
+	r.HandleFunc("/cancellationfees", AllCancellationFees(db)).Methods("GET")
+
+	// Guest Type (read-only)
+	r.HandleFunc("/guesttypes", AllGuestTypes(db)).Methods("GET")
 
 	r.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"), //The url pointing to API definition
