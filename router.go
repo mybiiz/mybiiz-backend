@@ -84,7 +84,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	r.HandleFunc("/roomtypes", AllRoomTypes(db)).Methods("GET")
 
 	// Food Accomodation (read-only)
-	r.HandleFunc("/roomtypes", AllFoodAccomodations(db)).Methods("GET")
+	r.HandleFunc("/foodaccomodations", AllFoodAccomodations(db)).Methods("GET")
 
 	// Cancellation Fee (read-only)
 	r.HandleFunc("/cancellationfees", AllCancellationFees(db)).Methods("GET")
