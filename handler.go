@@ -20,41 +20,33 @@ import (
 // GENERIC CRUD FUNCTION
 
 // All generic CRUD function
-func All(db *gorm.DB, table interface{}) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
-		db.Find(table)
-		json.NewEncoder(w).Encode(table)
-	}
+func All(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	db.Find(table)
+	json.NewEncoder(w).Encode(table)
 }
 
 // Get generic CRUD function
-func Get(db *gorm.DB, table interface{}) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
-		id := mux.Vars(r)["id"]
-		db.Where("id = ?", id).First(table)
-		json.NewEncoder(w).Encode(table)
-	}
+func Get(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	id := mux.Vars(r)["id"]
+	db.Where("id = ?", id).First(table)
+	json.NewEncoder(w).Encode(table)
 }
 
 // Post generic CRUD function
-func Post(db *gorm.DB, table interface{}) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("content-type", "application/json")
-		json.NewDecoder(r.Body).Decode(table)
-		db.Save(table)
-		json.NewEncoder(w).Encode(table)
-	}
+func Post(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	json.NewDecoder(r.Body).Decode(table)
+	db.Save(table)
+	json.NewEncoder(w).Encode(table)
 }
 
 // Delete generic CRUD function
-func Delete(db *gorm.DB, table interface{}) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		db.Delete(table, id)
-		json.NewEncoder(w).Encode(table)
-	}
+func Delete(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	db.Delete(table, id)
+	json.NewEncoder(w).Encode(table)
 }
 
 // User
@@ -66,8 +58,10 @@ func Delete(db *gorm.DB, table interface{}) func(w http.ResponseWriter, r *http.
 // @Success 200 {array} []User
 // @Router /users [get]
 func AllUsers(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var users []User
-	return All(db, &users)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var users []User
+		All(db, &users, w, r)
+	}
 }
 
 // GetUser endpoint
@@ -78,8 +72,10 @@ func AllUsers(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} User
 // @Router /users/{id} [get]
 func GetUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var user User
-	return Get(db, &user)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var user User
+		Get(db, &user, w, r)
+	}
 }
 
 // DeleteUser endpoint
@@ -90,8 +86,10 @@ func GetUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} User
 // @Router /users/{id} [delete]
 func DeleteUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var user User
-	return Delete(db, &user)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var user User
+		Delete(db, &user, w, r)
+	}
 }
 
 // PostUser endpoint
@@ -102,8 +100,11 @@ func DeleteUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} User
 // @Router /users/{id} [post]
 func PostUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var user User
-	return Get(db, &user)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var user User
+		Post(db, &user, w, r)
+	}
+
 }
 
 // Building
@@ -115,8 +116,10 @@ func PostUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []Building
 // @Router /buildings [get]
 func AllBuildings(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var buildings []Building
-	return All(db, &buildings)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var buildings []Building
+		All(db, &buildings, w, r)
+	}
 }
 
 // GetBuilding endpoint
@@ -127,8 +130,11 @@ func AllBuildings(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Building
 // @Router /buildings/{id} [get]
 func GetBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var building Building
-	return Get(db, &building)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var building Building
+		Get(db, &building, w, r)
+	}
+
 }
 
 // DeleteBuilding endpoint
@@ -139,8 +145,10 @@ func GetBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Building
 // @Router /buildings/{id} [delete]
 func DeleteBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var building Building
-	return Delete(db, &building)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var building Building
+		Delete(db, &building, w, r)
+	}
 }
 
 // PostBuilding endpoint
@@ -151,8 +159,10 @@ func DeleteBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Building
 // @Router /buildings [post]
 func PostBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var building Building
-	return Post(db, &building)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var building Building
+		Post(db, &building, w, r)
+	}
 }
 
 // AllBanks endpoint
@@ -162,8 +172,11 @@ func PostBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []Bank
 // @Router /banks [get]
 func AllBanks(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var banks []Bank
-	return All(db, &banks)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var banks []Bank
+		All(db, &banks, w, r)
+	}
+
 }
 
 // Role
@@ -175,8 +188,10 @@ func AllBanks(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []Role
 // @Router /roles [get]
 func AllRoles(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var roles []Role
-	return All(db, &roles)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var roles []Role
+		All(db, &roles, w, r)
+	}
 }
 
 // GetRole endpoint
@@ -187,8 +202,10 @@ func AllRoles(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Role
 // @Router /roles/{id} [get]
 func GetRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var role Role
-	return Get(db, &role)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var role Role
+		Get(db, &role, w, r)
+	}
 }
 
 // DeleteRole endpoint
@@ -199,8 +216,10 @@ func GetRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Role
 // @Router /roles/{id} [delete]
 func DeleteRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var role Role
-	return Delete(db, &role)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var role Role
+		Delete(db, &role, w, r)
+	}
 }
 
 // PostRole endpoint
@@ -211,8 +230,10 @@ func DeleteRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Role
 // @Router /roles [post]
 func PostRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var role Role
-	return Post(db, &role)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var role Role
+		Post(db, &role, w, r)
+	}
 }
 
 // Partners
@@ -224,8 +245,10 @@ func PostRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []Role
 // @Router /partners [get]
 func AllPartners(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var partners []Partner
-	return All(db, &partners)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var partners []Partner
+		All(db, &partners, w, r)
+	}
 }
 
 // GetPartner endpoint
@@ -236,8 +259,10 @@ func AllPartners(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Partner
 // @Router /partners/{id} [get]
 func GetPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var partner Partner
-	return Get(db, &partner)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var partner Partner
+		Get(db, &partner, w, r)
+	}
 }
 
 // DeletePartner endpoint
@@ -248,8 +273,10 @@ func GetPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Partner
 // @Router /partners/{id} [delete]
 func DeletePartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var partner Partner
-	return Delete(db, &partner)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var partner Partner
+		Delete(db, &partner, w, r)
+	}
 }
 
 // PostPartner endpoint
@@ -260,8 +287,10 @@ func DeletePartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Partner
 // @Router /partners [post]
 func PostPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var partner Partner
-	return Post(db, &partner)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var partner Partner
+		Post(db, &partner, w, r)
+	}
 }
 
 // Businesses
@@ -275,8 +304,10 @@ func PostPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []Business
 // @Router /businesses [get]
 func AllBusinesses(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var businesses []Business
-	return All(db, &businesses)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var businesses []Business
+		All(db, &businesses, w, r)
+	}
 }
 
 // GetBusiness endpoint
@@ -287,8 +318,10 @@ func AllBusinesses(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Business
 // @Router /businesses/{id} [get]
 func GetBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var business Business
-	return Get(db, &business)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var business Business
+		Get(db, &business, w, r)
+	}
 }
 
 // DeleteBusiness endpoint
@@ -299,8 +332,10 @@ func GetBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Business
 // @Router /businesses/{id} [delete]
 func DeleteBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var business Business
-	return Delete(db, &business)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var business Business
+		Delete(db, &business, w, r)
+	}
 }
 
 // PostBusiness endpoint
@@ -311,8 +346,10 @@ func DeleteBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Business
 // @Router /businesses [post]
 func PostBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var business Business
-	return Post(db, &business)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var business Business
+		Post(db, &business, w, r)
+	}
 }
 
 // ServiceType
@@ -324,8 +361,10 @@ func PostBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []ServiceType
 // @Router /servicetypes [get]
 func AllServiceTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var serviceTypes []ServiceType
-	return All(db, &serviceTypes)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var serviceTypes []ServiceType
+		All(db, &serviceTypes, w, r)
+	}
 }
 
 // GetServiceType endpoint
@@ -336,8 +375,10 @@ func AllServiceTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Business
 // @Router /servicetypes/{id} [get]
 func GetServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var serviceType ServiceType
-	return Get(db, &serviceType)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var serviceType ServiceType
+		Get(db, &serviceType, w, r)
+	}
 }
 
 // DeleteServiceType endpoint
@@ -348,8 +389,10 @@ func GetServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} ServiceType
 // @Router /servicetypes/{id} [delete]
 func DeleteServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var serviceType ServiceType
-	return Delete(db, &serviceType)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var serviceType ServiceType
+		Delete(db, &serviceType, w, r)
+	}
 }
 
 // PostServiceType endpoint
@@ -360,8 +403,10 @@ func DeleteServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request)
 // @Success 200 {object} ServiceType
 // @Router /servicetype [post]
 func PostServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var serviceType ServiceType
-	return Post(db, &serviceType)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var serviceType ServiceType
+		Post(db, &serviceType, w, r)
+	}
 }
 
 // Room
@@ -373,8 +418,10 @@ func PostServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []Room
 // @Router /rooms [get]
 func AllRooms(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var rooms []Room
-	return All(db, &rooms)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var rooms []Room
+		All(db, &rooms, w, r)
+	}
 }
 
 // GetRoom endpoint
@@ -385,8 +432,10 @@ func AllRooms(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Room
 // @Router /rooms/{id} [get]
 func GetRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var room Room
-	return Get(db, &room)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var room Room
+		Get(db, &room, w, r)
+	}
 }
 
 // DeleteRoom endpoint
@@ -397,8 +446,10 @@ func GetRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Room
 // @Router /rooms/{id} [delete]
 func DeleteRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var room Room
-	return Delete(db, &room)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var room Room
+		Delete(db, &room, w, r)
+	}
 }
 
 // PostRoom endpoint
@@ -409,8 +460,10 @@ func DeleteRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} Room
 // @Router /rooms [post]
 func PostRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var room Room
-	return Post(db, &room)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var room Room
+		Post(db, &room, w, r)
+	}
 }
 
 // ComingSoonEmails
@@ -422,8 +475,10 @@ func PostRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []ComingSoonEmail
 // @Router /coming-soon-emails [get]
 func AllComingSoonEmails(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var comingSoonEmails []ComingSoonEmail
-	return All(db, &comingSoonEmails)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var comingSoonEmails []ComingSoonEmail
+		All(db, &comingSoonEmails, w, r)
+	}
 }
 
 // GetComingSoonEmail endpoint
@@ -434,8 +489,10 @@ func AllComingSoonEmails(db *gorm.DB) func(w http.ResponseWriter, r *http.Reques
 // @Success 200 {object} ComingSoonEmail
 // @Router /coming-soon-emails/{id} [get]
 func GetComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var comingSoonEmail ComingSoonEmail
-	return Get(db, &comingSoonEmail)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var comingSoonEmail ComingSoonEmail
+		Get(db, &comingSoonEmail, w, r)
+	}
 }
 
 // DeleteComingSoonEmail endpoint
@@ -446,8 +503,10 @@ func GetComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Request
 // @Success 200 {object} ComingSoonEmail
 // @Router /coming-soon-emails/{id} [delete]
 func DeleteComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var comingSoonEmail ComingSoonEmail
-	return Delete(db, &comingSoonEmail)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var comingSoonEmail ComingSoonEmail
+		Delete(db, &comingSoonEmail, w, r)
+	}
 }
 
 // PostComingSoonEmail endpoint
@@ -458,8 +517,10 @@ func DeleteComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Requ
 // @Success 200 {object} ComingSoonEmail
 // @Router /coming-soon-emails [post]
 func PostComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var comingSoonEmail ComingSoonEmail
-	return Post(db, &comingSoonEmail)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var comingSoonEmail ComingSoonEmail
+		Post(db, &comingSoonEmail, w, r)
+	}
 }
 
 // Login endpoint
@@ -707,8 +768,10 @@ func ViewUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []RoomType
 // @Router /roomtypes [get]
 func AllRoomTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var roomTypes []RoomType
-	return All(db, &roomTypes)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var roomTypes []RoomType
+		All(db, &roomTypes, w, r)
+	}
 }
 
 // AllFoodAccomodations endpoint
@@ -718,8 +781,10 @@ func AllRoomTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} []FoodAccomodation
 // @Router /foodaccomodations [get]
 func AllFoodAccomodations(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var foodAccomodations []FoodAccomodation
-	return All(db, &foodAccomodations)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var foodAccomodations []FoodAccomodation
+		All(db, &foodAccomodations, w, r)
+	}
 }
 
 // AllCancellationFees endpoint
@@ -729,8 +794,10 @@ func AllFoodAccomodations(db *gorm.DB) func(w http.ResponseWriter, r *http.Reque
 // @Success 200 {array} []CancellationFee
 // @Router /cancellationfees [get]
 func AllCancellationFees(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var cancellationFees []CancellationFee
-	return All(db, &cancellationFees)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var cancellationFees []CancellationFee
+		All(db, &cancellationFees, w, r)
+	}
 }
 
 // AllGuestTypes endpoint
@@ -740,6 +807,8 @@ func AllCancellationFees(db *gorm.DB) func(w http.ResponseWriter, r *http.Reques
 // @Success 200 {array} []GuestType
 // @Router /guesttypes [get]
 func AllGuestTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
-	var guestTypes []GuestType
-	return All(db, &guestTypes)
+	return func(w http.ResponseWriter, r *http.Request) {
+		var guestTypes []GuestType
+		All(db, &guestTypes, w, r)
+	}
 }
