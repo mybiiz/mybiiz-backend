@@ -69,7 +69,7 @@ func Populate(db *gorm.DB) {
 		FoodAccomodation{Name: "Gratis Dinner"},
 		FoodAccomodation{Name: "Gratis Sarapan & Dinner"},
 		FoodAccomodation{Name: "Gratis Jamuan"},
-		FoodAccomodation{Name: "Gratis Tidak ada makanan"}}
+		FoodAccomodation{Name: "Tidak ada makanan"}}
 
 	for _, foodAccomodation := range foodAccomodations {
 		var foundFoodAccomodation FoodAccomodation

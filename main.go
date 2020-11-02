@@ -20,6 +20,7 @@ func main() {
 	db := DbInit()
 
 	r := mux.NewRouter()
+	r.Use(AuthMiddleware)
 	Route(r, &db)
 
 	// handler := cors.Default().Handler(r)

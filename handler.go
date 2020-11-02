@@ -466,6 +466,30 @@ func PostRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// RoomsView endpoint
+// @Summary All Rooms view with preload
+// @Tags rooms
+// @Produce  json
+// @Success 200 {array} []Room
+// @Router /rooms [get]
+func RoomsView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		id := mux.Vars(r)["id"]
+
+		var rooms []Room
+
+		builder := db.Preload("RoomType").
+			Preload("FoodAccomodation").
+			Preload("CancellationFee").
+			Preload("GuestType")
+
+		builder.Where("business_id = ?", id).Find(&rooms)
+
+		json.NewEncoder(w).Encode(&rooms)
+	}
+}
+
 // ComingSoonEmails
 
 // AllComingSoonEmails endpoint
