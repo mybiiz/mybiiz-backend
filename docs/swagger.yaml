@@ -338,9 +338,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Bank'
-              type: array
+              $ref: '#/definitions/main.Bank'
             type: array
       summary: All Banks
       tags:
@@ -354,9 +352,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Building'
-              type: array
+              $ref: '#/definitions/main.Building'
             type: array
       summary: All Buildings
       tags:
@@ -423,9 +419,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Business'
-              type: array
+              $ref: '#/definitions/main.Business'
             type: array
       summary: All Businesses
       tags:
@@ -492,9 +486,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.CancellationFee'
-              type: array
+              $ref: '#/definitions/main.CancellationFee'
             type: array
       summary: AllCancellationFees
       tags:
@@ -508,9 +500,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.ComingSoonEmail'
-              type: array
+              $ref: '#/definitions/main.ComingSoonEmail'
             type: array
       summary: All Coming Soon Emails
       tags:
@@ -577,9 +567,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.FoodAccomodation'
-              type: array
+              $ref: '#/definitions/main.FoodAccomodation'
             type: array
       summary: AllRoomTypes
       tags:
@@ -603,9 +591,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.GuestType'
-              type: array
+              $ref: '#/definitions/main.GuestType'
             type: array
       summary: AllGuestTypes
       tags:
@@ -613,20 +599,20 @@ paths:
   /login:
     post:
       parameters:
-      - description: PartnerRegister body
+      - description: Login body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/main.PartnerRegister'
+          $ref: '#/definitions/main.LoginBody'
       responses:
         "200":
-          description: ok
+          description: jwt
           schema:
             type: string
-      summary: PartnerRegisterHandler
+      summary: Login
       tags:
-      - partners
+      - auth
   /partners:
     get:
       produces:
@@ -636,9 +622,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Role'
-              type: array
+              $ref: '#/definitions/main.Role'
             type: array
       summary: All Partners
       tags:
@@ -714,6 +698,23 @@ paths:
       summary: Get Partner View
       tags:
       - partners
+  /partnersregister:
+    post:
+      parameters:
+      - description: PartnerRegister body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.PartnerRegister'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: PartnerRegisterHandler
+      tags:
+      - partners
   /partnersview:
     get:
       produces:
@@ -723,9 +724,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Role'
-              type: array
+              $ref: '#/definitions/main.Role'
             type: array
       summary: All Roles
       tags:
@@ -756,9 +755,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Role'
-              type: array
+              $ref: '#/definitions/main.Role'
             type: array
       summary: All Roles
       tags:
@@ -825,11 +822,9 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Room'
-              type: array
+              $ref: '#/definitions/main.Room'
             type: array
-      summary: All Rooms
+      summary: All Rooms view with preload
       tags:
       - rooms
     post:
@@ -894,9 +889,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.RoomType'
-              type: array
+              $ref: '#/definitions/main.RoomType'
             type: array
       summary: AllRoomTypes
       tags:
@@ -929,9 +922,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.ServiceType'
-              type: array
+              $ref: '#/definitions/main.ServiceType'
             type: array
       summary: All Service Types
       tags:
@@ -980,9 +971,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.User'
-              type: array
+              $ref: '#/definitions/main.User'
             type: array
       summary: All Users
       tags:
@@ -1071,7 +1060,7 @@ paths:
         "200":
           description: ok
           schema:
-            type: string
+            $ref: '#/definitions/string'
       summary: Save User
       tags:
       - users

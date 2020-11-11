@@ -55,7 +55,7 @@ func Delete(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Reque
 // @Summary All Users
 // @Tags users
 // @Produce  json
-// @Success 200 {array} []User
+// @Success 200 {array} User
 // @Router /users [get]
 func AllUsers(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -113,7 +113,7 @@ func PostUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Buildings
 // @Tags buildings
 // @Produce  json
-// @Success 200 {array} []Building
+// @Success 200 {array} Building
 // @Router /buildings [get]
 func AllBuildings(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -169,7 +169,7 @@ func PostBuilding(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Banks
 // @Tags banks
 // @Produce  json
-// @Success 200 {array} []Bank
+// @Success 200 {array} Bank
 // @Router /banks [get]
 func AllBanks(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -185,7 +185,7 @@ func AllBanks(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Roles
 // @Tags roles
 // @Produce  json
-// @Success 200 {array} []Role
+// @Success 200 {array} Role
 // @Router /roles [get]
 func AllRoles(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -242,7 +242,7 @@ func PostRole(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Partners
 // @Tags partners
 // @Produce  json
-// @Success 200 {array} []Role
+// @Success 200 {array} Role
 // @Router /partners [get]
 func AllPartners(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -301,7 +301,7 @@ func PostPartner(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Businesses
 // @Tags businesses
 // @Produce  json
-// @Success 200 {array} []Business
+// @Success 200 {array} Business
 // @Router /businesses [get]
 func AllBusinesses(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -358,7 +358,7 @@ func PostBusiness(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Service Types
 // @Tags servicetypes
 // @Produce  json
-// @Success 200 {array} []ServiceType
+// @Success 200 {array} ServiceType
 // @Router /servicetypes [get]
 func AllServiceTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -415,7 +415,7 @@ func PostServiceType(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Rooms
 // @Tags rooms
 // @Produce  json
-// @Success 200 {array} []Room
+// @Success 200 {array} Room
 // @Router /rooms [get]
 func AllRooms(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -470,7 +470,7 @@ func PostRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Rooms view with preload
 // @Tags rooms
 // @Produce  json
-// @Success 200 {array} []Room
+// @Success 200 {array} Room
 // @Router /rooms [get]
 func RoomsView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -496,7 +496,7 @@ func RoomsView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary All Coming Soon Emails
 // @Tags comingsoonemails
 // @Produce  json
-// @Success 200 {array} []ComingSoonEmail
+// @Success 200 {array} ComingSoonEmail
 // @Router /coming-soon-emails [get]
 func AllComingSoonEmails(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -573,6 +573,7 @@ func Login(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		var user User
 		if res := db.Where("email = ?", loginBody.Email).First(&user); res.Error != nil {
 			w.WriteHeader(http.StatusNotFound)
+			fmt.Fprintf(w, "User not found!")
 			return
 		}
 
@@ -581,6 +582,7 @@ func Login(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 		if notMatch := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginBody.Password)); notMatch != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "Password does not match!")
 			return
 		}
 
@@ -593,6 +595,7 @@ func Login(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintf(w, "Error generating token!")
 			return
 		}
 
@@ -681,7 +684,7 @@ func Register(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Tags partners
 // @Param   body      body PartnerRegister     true "PartnerRegister body"
 // @Success 200 {string} string "ok"
-// @Router /login [post]
+// @Router /partnersregister [post]
 func PartnerRegisterHandler(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var partnerRegister PartnerRegister
@@ -740,7 +743,7 @@ func PartnerRegisterHandler(db *gorm.DB) func(w http.ResponseWriter, r *http.Req
 // @Summary All Roles
 // @Tags partners
 // @Produce  json
-// @Success 200 {array} []Role
+// @Success 200 {array} Role
 // @Router /partnersview [get]
 func PartnersView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -789,7 +792,7 @@ func ViewUser(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary AllRoomTypes
 // @Tags rooms_additions
 // @Produce  json
-// @Success 200 {array} []RoomType
+// @Success 200 {array} RoomType
 // @Router /roomtypes [get]
 func AllRoomTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -802,7 +805,7 @@ func AllRoomTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 // @Summary AllRoomTypes
 // @Tags rooms_additions
 // @Produce  json
-// @Success 200 {array} []FoodAccomodation
+// @Success 200 {array} FoodAccomodation
 // @Router /foodaccomodations [get]
 func AllFoodAccomodations(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -815,7 +818,7 @@ func AllFoodAccomodations(db *gorm.DB) func(w http.ResponseWriter, r *http.Reque
 // @Summary AllCancellationFees
 // @Tags rooms_additions
 // @Produce  json
-// @Success 200 {array} []CancellationFee
+// @Success 200 {array} CancellationFee
 // @Router /cancellationfees [get]
 func AllCancellationFees(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -828,7 +831,7 @@ func AllCancellationFees(db *gorm.DB) func(w http.ResponseWriter, r *http.Reques
 // @Summary AllGuestTypes
 // @Tags rooms_additions
 // @Produce  json
-// @Success 200 {array} []GuestType
+// @Success 200 {array} GuestType
 // @Router /guesttypes [get]
 func AllGuestTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {

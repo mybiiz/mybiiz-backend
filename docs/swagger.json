@@ -24,10 +24,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Bank"
-                                }
+                                "$ref": "#/definitions/main.Bank"
                             }
                         }
                     }
@@ -49,10 +46,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Building"
-                                }
+                                "$ref": "#/definitions/main.Building"
                             }
                         }
                     }
@@ -156,10 +150,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Business"
-                                }
+                                "$ref": "#/definitions/main.Business"
                             }
                         }
                     }
@@ -263,10 +254,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.CancellationFee"
-                                }
+                                "$ref": "#/definitions/main.CancellationFee"
                             }
                         }
                     }
@@ -288,10 +276,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.ComingSoonEmail"
-                                }
+                                "$ref": "#/definitions/main.ComingSoonEmail"
                             }
                         }
                     }
@@ -395,10 +380,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.FoodAccomodation"
-                                }
+                                "$ref": "#/definitions/main.FoodAccomodation"
                             }
                         }
                     }
@@ -436,10 +418,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.GuestType"
-                                }
+                                "$ref": "#/definitions/main.GuestType"
                             }
                         }
                     }
@@ -449,23 +428,23 @@
         "/login": {
             "post": {
                 "tags": [
-                    "partners"
+                    "auth"
                 ],
-                "summary": "PartnerRegisterHandler",
+                "summary": "Login",
                 "parameters": [
                     {
-                        "description": "PartnerRegister body",
+                        "description": "Login body",
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.PartnerRegister"
+                            "$ref": "#/definitions/main.LoginBody"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "jwt",
                         "schema": {
                             "type": "string"
                         }
@@ -488,10 +467,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Role"
-                                }
+                                "$ref": "#/definitions/main.Role"
                             }
                         }
                     }
@@ -608,6 +584,33 @@
                 }
             }
         },
+        "/partnersregister": {
+            "post": {
+                "tags": [
+                    "partners"
+                ],
+                "summary": "PartnerRegisterHandler",
+                "parameters": [
+                    {
+                        "description": "PartnerRegister body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.PartnerRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/partnersview": {
             "get": {
                 "produces": [
@@ -623,10 +626,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Role"
-                                }
+                                "$ref": "#/definitions/main.Role"
                             }
                         }
                     }
@@ -675,10 +675,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Role"
-                                }
+                                "$ref": "#/definitions/main.Role"
                             }
                         }
                     }
@@ -775,17 +772,14 @@
                 "tags": [
                     "rooms"
                 ],
-                "summary": "All Rooms",
+                "summary": "All Rooms view with preload",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Room"
-                                }
+                                "$ref": "#/definitions/main.Room"
                             }
                         }
                     }
@@ -889,10 +883,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.RoomType"
-                                }
+                                "$ref": "#/definitions/main.RoomType"
                             }
                         }
                     }
@@ -944,10 +935,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.ServiceType"
-                                }
+                                "$ref": "#/definitions/main.ServiceType"
                             }
                         }
                     }
@@ -1023,10 +1011,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.User"
-                                }
+                                "$ref": "#/definitions/main.User"
                             }
                         }
                     }
@@ -1164,7 +1149,7 @@
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/string"
                         }
                     }
                 }
