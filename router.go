@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	_ "github.com/mybiiz/mybiiz-backend/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
+	"gorm.io/gorm"
 )
 
 func Route(r *mux.Router, dbPointer **gorm.DB) {
@@ -52,6 +52,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	r.HandleFunc("/partners", PostPartner(db)).Methods("POST")
 	r.HandleFunc("/partnersregister", PartnerRegisterHandler(db)).Methods("POST")
 	r.HandleFunc("/partnersview", PartnersView(db)).Methods("GET")
+	r.HandleFunc("/partnerspaged", PartnersPaged(db)).Methods("GET")
 	r.HandleFunc("/partners/{id}/view", PartnerView(db)).Methods("GET")
 
 	// Businesses

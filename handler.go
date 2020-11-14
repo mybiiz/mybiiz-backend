@@ -12,10 +12,10 @@ import (
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 )
 
@@ -160,10 +160,12 @@ func UsersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		var users []User
 		var count int64
 		db.Find(&users).Count(&count)
-		db.Preload("Partners.Business.ServiceType").
+
+		dbToFind := db.Preload("Partners.Business.ServiceType").
 			Preload("Partners.Bank").
-			Scopes(Paginate(r)).
-			Find(&users)
+			Scopes(Paginate(r))
+
+		dbToFind.Find(&users)
 		page := Page{
 			GetPageInfo(db, count, &users, r),
 			users,
@@ -356,6 +358,38 @@ func AllPartners(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var partners []Partner
 		All(db, &partners, w, r)
+	}
+}
+
+// PartnersPaged endpoint
+// @Summary All Partners Paged
+// @Tags users
+// @Produce  json
+// @Param page query int true "Page no"
+// @Param perPage query int true "Items per page"
+// @Success 200 {array} Partner
+// @Router /partnerspaged [get]
+func PartnersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		var partners []Partner
+		var count int64
+		db.Find(&partners).Count(&count)
+
+		db.
+			Debug().
+			Preload("User").
+			Preload("Business.ServiceType").
+			Preload("Bank").
+			Joins("Business").
+			// Where("Business.service_type_id = ?", 3).
+			Scopes(Paginate(r)).
+			Find(&partners)
+		page := Page{
+			GetPageInfo(db, count, &partners, r),
+			partners,
+		}
+		json.NewEncoder(w).Encode(&page)
 	}
 }
 

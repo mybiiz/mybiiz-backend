@@ -50,7 +50,7 @@ type Partner struct {
 	Lon    float32 `json:"lon"`
 	User   User    `json:"user"`
 	UserID uint    `json:"userId"`
-	Rooms  []Room  `json:"room"`
+	// Rooms  []Room  `json:"room"`
 }
 
 type ServiceType struct {
