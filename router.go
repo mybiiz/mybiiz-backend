@@ -31,6 +31,7 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	r.HandleFunc("/users", PostUser(db)).Methods("POST")
 	r.HandleFunc("/users/{id}/view", ViewUser(db)).Methods("GET")
 	r.HandleFunc("/userssave", SaveUser(db)).Methods("POST")
+	r.HandleFunc("/userspaged", UsersPaged(db)).Methods("GET")
 
 	// Role
 	r.HandleFunc("/roles", AllRoles(db)).Methods("GET")

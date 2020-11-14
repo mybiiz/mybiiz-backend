@@ -1047,6 +1047,31 @@ paths:
       summary: Get User view
       tags:
       - users
+  /userspaged:
+    get:
+      parameters:
+      - description: Page no
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Items per page
+        in: query
+        name: perPage
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.User'
+            type: array
+      summary: All Users Paged
+      tags:
+      - users
   /userssave:
     post:
       parameters:

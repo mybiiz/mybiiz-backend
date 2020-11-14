@@ -4,9 +4,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"math"
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -49,6 +51,86 @@ func Delete(db *gorm.DB, table interface{}, w http.ResponseWriter, r *http.Reque
 	json.NewEncoder(w).Encode(table)
 }
 
+// PageInfo function
+func GetPageInfo(db *gorm.DB, count int64, table interface{}, r *http.Request) PageInfo {
+	// var count int64
+	var page int
+	var perPage int
+
+	pageInt, err := strconv.Atoi(r.FormValue("page"))
+
+	if err != nil {
+		page = 0
+	} else {
+		page = pageInt
+	}
+
+	perPageInt, err := strconv.Atoi(r.FormValue("perPage"))
+
+	if err != nil {
+		perPage = 10
+	} else {
+		perPage = perPageInt
+	}
+
+	// db.Find(table).Count(&count)
+	// db.Scopes(Paginate(r)).Find(table)
+
+	lastPage := func() float64 {
+		if int64(perPage) == count {
+			return 0
+		} else {
+			return float64(count) / float64(perPage)
+		}
+	}()
+
+	return PageInfo{
+		TotalElements: count,
+		Last:          int64(math.Floor(lastPage)),
+		Page:          page,
+		PerPage:       perPage,
+	}
+}
+
+// Paginate Function
+func Paginate(r *http.Request) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		var page int
+		var perPage int
+
+		pageInt, err := strconv.Atoi(r.FormValue("page"))
+
+		if err != nil {
+			page = 0
+		} else {
+			// fmt.Println("Page Int", pageInt)
+			page = pageInt
+		}
+
+		perPageInt, err := strconv.Atoi(r.FormValue("perPage"))
+
+		if err != nil {
+			perPage = 10
+		} else {
+			// fmt.Println("Per page", perPageInt)
+
+			switch {
+			case perPageInt > 100:
+				perPage = 100
+			case perPageInt <= 0:
+				perPage = 10
+			default:
+				perPage = perPageInt
+			}
+		}
+
+		// fmt.Println("Offset & perpage:", page, perPage)
+
+		offset := page * perPage
+		return db.Offset(offset).Limit(perPage)
+	}
+}
+
 // User
 
 // AllUsers endpoint
@@ -61,6 +143,29 @@ func AllUsers(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var users []User
 		All(db, &users, w, r)
+	}
+}
+
+// UsersPaged endpoint
+// @Summary All Users Paged
+// @Tags users
+// @Produce  json
+// @Param page query int true "Page no"
+// @Param perPage query int true "Items per page"
+// @Success 200 {array} User
+// @Router /userspaged [get]
+func UsersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("content-type", "application/json")
+		var users []User
+		var count int64
+		db.Find(&users).Count(&count)
+		db.Preload("Partners").Scopes(Paginate(r)).Find(&users)
+		page := Page{
+			GetPageInfo(db, count, &users, r),
+			users,
+		}
+		json.NewEncoder(w).Encode(&page)
 	}
 }
 
