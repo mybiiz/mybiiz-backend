@@ -376,15 +376,22 @@ func PartnersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		var count int64
 		db.Find(&partners).Count(&count)
 
-		db.
-			Debug().
+		serviceTypeId := r.FormValue("serviceTypeId")
+		fmt.Println("Service type ID:", serviceTypeId)
+
+		dbToFind := db.
+			// Debug().
 			Preload("User").
 			Preload("Business.ServiceType").
 			Preload("Bank").
 			Joins("Business").
-			// Where("Business.service_type_id = ?", 3).
-			Scopes(Paginate(r)).
-			Find(&partners)
+			Scopes(Paginate(r))
+
+		if serviceTypeId != "0" {
+			dbToFind.Where("Business.service_type_id = ?", serviceTypeId)
+		}
+		dbToFind.Find(&partners)
+
 		page := Page{
 			GetPageInfo(db, count, &partners, r),
 			partners,
