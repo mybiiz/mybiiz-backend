@@ -160,7 +160,10 @@ func UsersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		var users []User
 		var count int64
 		db.Find(&users).Count(&count)
-		db.Preload("Partners").Scopes(Paginate(r)).Find(&users)
+		db.Preload("Partners.Business.ServiceType").
+			Preload("Partners.Bank").
+			Scopes(Paginate(r)).
+			Find(&users)
 		page := Page{
 			GetPageInfo(db, count, &users, r),
 			users,
