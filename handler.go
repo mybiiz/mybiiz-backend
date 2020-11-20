@@ -159,13 +159,14 @@ func UsersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-type", "application/json")
 		var users []User
 		var count int64
-		db.Find(&users).Count(&count)
+		// db.Find(&users).Count(&count)
 
 		dbToFind := db.Preload("Partners.Business.ServiceType").
 			Preload("Partners.Bank").
-			Scopes(Paginate(r))
+			Order("id desc")
+			// Scopes(Paginate(r))
 
-		dbToFind.Find(&users)
+		dbToFind.Find(&users).Count(&count).Scopes(Paginate(r)).Find(&users)
 		page := Page{
 			GetPageInfo(db, count, &users, r),
 			users,
@@ -385,12 +386,13 @@ func PartnersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 			Preload("Business.ServiceType").
 			Preload("Bank").
 			Joins("Business").
-			Scopes(Paginate(r))
+			Order("id desc")
+			// Scopes(Paginate(r))
 
 		if serviceTypeId != "0" {
 			dbToFind.Where("Business.service_type_id = ?", serviceTypeId)
 		}
-		dbToFind.Find(&partners)
+		dbToFind.Find(&partners).Count(&count).Scopes(Paginate(r)).Find(&partners)
 
 		page := Page{
 			GetPageInfo(db, count, &partners, r),
