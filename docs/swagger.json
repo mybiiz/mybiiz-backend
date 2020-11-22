@@ -584,6 +584,55 @@
                 }
             }
         },
+        "/partnersexcel": {
+            "get": {
+                "tags": [
+                    "partners"
+                ],
+                "summary": "All Partners Paged excel",
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/partnerspaged": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "partners"
+                ],
+                "summary": "All Partners Paged",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page no",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Items per page",
+                        "name": "perPage",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Partner"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/partnersregister": {
             "post": {
                 "tags": [
@@ -1445,12 +1494,6 @@
                 },
                 "position": {
                     "type": "string"
-                },
-                "room": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/main.Room"
-                    }
                 },
                 "sex": {
                     "type": "string"

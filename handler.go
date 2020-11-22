@@ -14,6 +14,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 
+	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -364,7 +365,7 @@ func AllPartners(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 
 // PartnersPaged endpoint
 // @Summary All Partners Paged
-// @Tags users
+// @Tags partners
 // @Produce  json
 // @Param page query int true "Page no"
 // @Param perPage query int true "Items per page"
@@ -399,6 +400,54 @@ func PartnersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 			partners,
 		}
 		json.NewEncoder(w).Encode(&page)
+	}
+}
+
+// PartnersExcel endpoint
+// @Summary All Partners Paged excel
+// @Tags partners
+// @Success 200
+// @Router /partnersexcel [get]
+func PartnersExcel(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		f := excelize.NewFile()
+		index := f.NewSheet("Partners")
+
+		f.SetCellValue("Partners", "A1", "No")
+		f.SetCellValue("Partners", "B1", "Email")
+		f.SetCellValue("Partners", "C1", "Name")
+		f.SetCellValue("Partners", "D1", "Business Name")
+		f.SetCellValue("Partners", "E1", "Phone")
+		f.SetCellValue("Partners", "F1", "Bank")
+		f.SetCellValue("Partners", "G1", "Bank Account #")
+		f.SetCellValue("Partners", "H1", "Service Type")
+
+		var partners []Partner
+		db.
+			Preload("Business.ServiceType").
+			Preload("Bank").
+			Preload("User").
+			Find(&partners)
+
+		for i, partner := range partners {
+			excelIndex := i + 2
+
+			f.SetCellValue("Partners", fmt.Sprintf("A%d", excelIndex), i+1)
+			f.SetCellValue("Partners", fmt.Sprintf("B%d", excelIndex), partner.User.Email)
+			f.SetCellValue("Partners", fmt.Sprintf("C%d", excelIndex), fmt.Sprintf("%s %s", partner.FirstName, partner.LastName))
+			f.SetCellValue("Partners", fmt.Sprintf("D%d", excelIndex), partner.Business.Name)
+			f.SetCellValue("Partners", fmt.Sprintf("E%d", excelIndex), partner.Phone)
+			f.SetCellValue("Partners", fmt.Sprintf("F%d", excelIndex), fmt.Sprintf("%s - %s", partner.Bank.Code, partner.Bank.Name))
+			f.SetCellValue("Partners", fmt.Sprintf("G%d", excelIndex), partner.BankAccountID)
+			f.SetCellValue("Partners", fmt.Sprintf("H%d", excelIndex), partner.Business.ServiceType.Name)
+		}
+
+		f.SetActiveSheet(index)
+
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Set("Content-Disposition", "attachment; filename=partners.xlsx")
+		w.Header().Set("Content-Transfer-Encoding", "binary")
+		f.Write(w)
 	}
 }
 
