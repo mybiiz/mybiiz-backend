@@ -164,3 +164,10 @@ type LaundryType struct {
 	GormModel
 	Name string `json:"name"`
 }
+
+type City struct {
+	GormModel
+	Name string  `json:"name"`
+	Lat  float64 `json:"lat"`
+	Lon  float64 `json:"lon"`
+}

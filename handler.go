@@ -376,7 +376,7 @@ func PartnersPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-type", "application/json")
 		var partners []Partner
 		var count int64
-		db.Find(&partners).Count(&count)
+		// db.Find(&partners).Count(&count)
 
 		serviceTypeId := r.FormValue("serviceTypeId")
 		fmt.Println("Service type ID:", serviceTypeId)
@@ -744,6 +744,88 @@ func PostComingSoonEmail(db *gorm.DB) func(w http.ResponseWriter, r *http.Reques
 	return func(w http.ResponseWriter, r *http.Request) {
 		var comingSoonEmail ComingSoonEmail
 		Post(db, &comingSoonEmail, w, r)
+	}
+}
+
+// Cities
+
+// AllCities endpoint
+// @Summary All Cities
+// @Tags cities
+// @Produce  json
+// @Success 200 {array} City
+// @Router /cities [get]
+func AllCities(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var cities []City
+		All(db, &cities, w, r)
+	}
+}
+
+// GetCity endpoint
+// @Summary Get City
+// @Tags cities
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} City
+// @Router /cities/{id} [get]
+func GetCity(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var city City
+		Get(db, &city, w, r)
+	}
+}
+
+// DeleteCity endpoint
+// @Summary Delete City
+// @Tags cities
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} City
+// @Router /cities/{id} [delete]
+func DeleteCity(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var city City
+		Delete(db, &city, w, r)
+	}
+}
+
+// PostCity endpoint
+// @Summary Post City
+// @Tags cities
+// @Produce  json
+// @Param   body      body  City     true "City"
+// @Success 200 {object} City
+// @Router /cities [post]
+func PostCity(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var city City
+		Post(db, &city, w, r)
+	}
+}
+
+// CitiesPaged endpoint
+// @Summary Get Cities Paged
+// @Tags cities
+// @Produce  json
+// @Success 200 {object} City
+// @Router /citiespaged [get]
+func CitiesPaged(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		var cities []City
+		var count int64
+
+		dbToFind := db.Order("id desc")
+
+		dbToFind.Find(&cities).Count(&count).Scopes(Paginate(r)).Find(&cities)
+
+		page := Page{
+			GetPageInfo(db, count, &cities, r),
+			cities,
+		}
+
+		json.NewEncoder(w).Encode(&page)
 	}
 }
 

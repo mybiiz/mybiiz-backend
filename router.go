@@ -81,6 +81,13 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 	r.HandleFunc("/coming-soon-emails/{id}", DeleteComingSoonEmail(db)).Methods("DELETE")
 	r.HandleFunc("/coming-soon-emails", PostComingSoonEmail(db)).Methods("POST")
 
+	// Cities
+	r.HandleFunc("/cities", AllCities(db)).Methods("GET")
+	r.HandleFunc("/cities/{id}", GetCity(db)).Methods("GET")
+	r.HandleFunc("/cities/{id}", DeleteCity(db)).Methods("DELETE")
+	r.HandleFunc("/cities", PostCity(db)).Methods("POST")
+	r.HandleFunc("/citiespaged", CitiesPaged(db)).Methods("GET")
+
 	// Bank (read-only)
 	r.HandleFunc("/banks", AllBanks(db)).Methods("GET")
 

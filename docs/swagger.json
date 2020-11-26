@@ -4,7 +4,6 @@
         "description": "This is the api doc for MyBiiz Backend.",
         "title": "MyBiiz Backend",
         "contact": {},
-        "license": {},
         "version": "1.0"
     },
     "basePath": "/",
@@ -256,6 +255,129 @@
                             "items": {
                                 "$ref": "#/definitions/main.CancellationFee"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/cities": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "All Cities",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.City"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "Post City",
+                "parameters": [
+                    {
+                        "description": "City",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.City"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.City"
+                        }
+                    }
+                }
+            }
+        },
+        "/cities/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "Get City",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.City"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "Delete City",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.City"
+                        }
+                    }
+                }
+            }
+        },
+        "/citiespaged": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cities"
+                ],
+                "summary": "Get Cities Paged",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.City"
                         }
                     }
                 }
@@ -591,7 +713,9 @@
                 ],
                 "summary": "All Partners Paged excel",
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1236,7 +1360,7 @@
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/string"
+                            "type": "string"
                         }
                     }
                 }
@@ -1327,7 +1451,6 @@
                     }
                 },
                 "serviceType": {
-                    "type": "object",
                     "$ref": "#/definitions/main.ServiceType"
                 },
                 "serviceTypeId": {
@@ -1349,6 +1472,32 @@
                 },
                 "id": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.City": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lon": {
+                    "type": "number"
                 },
                 "name": {
                     "type": "string"
@@ -1436,7 +1585,6 @@
                     "type": "string"
                 },
                 "bank": {
-                    "type": "object",
                     "$ref": "#/definitions/main.Bank"
                 },
                 "bankAccountId": {
@@ -1452,7 +1600,6 @@
                     "type": "string"
                 },
                 "business": {
-                    "type": "object",
                     "$ref": "#/definitions/main.Business"
                 },
                 "businessId": {
@@ -1502,7 +1649,6 @@
                     "type": "string"
                 },
                 "user": {
-                    "type": "object",
                     "$ref": "#/definitions/main.User"
                 },
                 "userId": {
@@ -1517,7 +1663,6 @@
                     "type": "string"
                 },
                 "partner": {
-                    "type": "object",
                     "$ref": "#/definitions/main.Partner"
                 }
             }
@@ -1526,11 +1671,9 @@
             "type": "object",
             "properties": {
                 "partner": {
-                    "type": "object",
                     "$ref": "#/definitions/main.Partner"
                 },
                 "user": {
-                    "type": "object",
                     "$ref": "#/definitions/main.User"
                 }
             }
@@ -1562,14 +1705,12 @@
                     "type": "integer"
                 },
                 "business": {
-                    "type": "object",
                     "$ref": "#/definitions/main.Business"
                 },
                 "businessId": {
                     "type": "integer"
                 },
                 "cancellationFee": {
-                    "type": "object",
                     "$ref": "#/definitions/main.CancellationFee"
                 },
                 "cancellationFeeId": {
@@ -1585,14 +1726,12 @@
                     "type": "string"
                 },
                 "foodAccomodation": {
-                    "type": "object",
                     "$ref": "#/definitions/main.FoodAccomodation"
                 },
                 "foodAccomodationId": {
                     "type": "integer"
                 },
                 "guestType": {
-                    "type": "object",
                     "$ref": "#/definitions/main.GuestType"
                 },
                 "guestTypeId": {
@@ -1614,7 +1753,6 @@
                     "type": "integer"
                 },
                 "roomType": {
-                    "type": "object",
                     "$ref": "#/definitions/main.RoomType"
                 },
                 "roomTypeId": {

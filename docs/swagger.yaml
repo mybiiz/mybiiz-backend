@@ -56,7 +56,6 @@ definitions:
         type: array
       serviceType:
         $ref: '#/definitions/main.ServiceType'
-        type: object
       serviceTypeId:
         type: integer
       updatedAt:
@@ -70,6 +69,23 @@ definitions:
         type: string
       id:
         type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  main.City:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      lat:
+        type: number
+      lon:
+        type: number
       name:
         type: string
       updatedAt:
@@ -127,7 +143,6 @@ definitions:
         type: string
       bank:
         $ref: '#/definitions/main.Bank'
-        type: object
       bankAccountId:
         type: string
       bankHolderName:
@@ -138,7 +153,6 @@ definitions:
         type: string
       business:
         $ref: '#/definitions/main.Business'
-        type: object
       businessId:
         type: integer
       city:
@@ -174,7 +188,6 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/main.User'
-        type: object
       userId:
         type: integer
     type: object
@@ -184,16 +197,13 @@ definitions:
         type: string
       partner:
         $ref: '#/definitions/main.Partner'
-        type: object
     type: object
   main.RegisterPostBody:
     properties:
       partner:
         $ref: '#/definitions/main.Partner'
-        type: object
       user:
         $ref: '#/definitions/main.User'
-        type: object
     type: object
   main.Role:
     properties:
@@ -214,12 +224,10 @@ definitions:
         type: integer
       business:
         $ref: '#/definitions/main.Business'
-        type: object
       businessId:
         type: integer
       cancellationFee:
         $ref: '#/definitions/main.CancellationFee'
-        type: object
       cancellationFeeId:
         type: integer
       createdAt:
@@ -230,12 +238,10 @@ definitions:
         type: string
       foodAccomodation:
         $ref: '#/definitions/main.FoodAccomodation'
-        type: object
       foodAccomodationId:
         type: integer
       guestType:
         $ref: '#/definitions/main.GuestType'
-        type: object
       guestTypeId:
         type: integer
       hasAc:
@@ -250,7 +256,6 @@ definitions:
         type: integer
       roomType:
         $ref: '#/definitions/main.RoomType'
-        type: object
       roomTypeId:
         type: integer
       updatedAt:
@@ -321,7 +326,6 @@ definitions:
 info:
   contact: {}
   description: This is the api doc for MyBiiz Backend.
-  license: {}
   title: MyBiiz Backend
   version: "1.0"
 paths:
@@ -487,6 +491,85 @@ paths:
       summary: AllCancellationFees
       tags:
       - rooms_additions
+  /cities:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.City'
+            type: array
+      summary: All Cities
+      tags:
+      - cities
+    post:
+      parameters:
+      - description: City
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.City'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.City'
+      summary: Post City
+      tags:
+      - cities
+  /cities/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.City'
+      summary: Delete City
+      tags:
+      - cities
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.City'
+      summary: Get City
+      tags:
+      - cities
+  /citiespaged:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.City'
+      summary: Get Cities Paged
+      tags:
+      - cities
   /coming-soon-emails:
     get:
       produces:
@@ -697,7 +780,8 @@ paths:
   /partnersexcel:
     get:
       responses:
-        "200": {}
+        "200":
+          description: ""
       summary: All Partners Paged excel
       tags:
       - partners
@@ -1113,7 +1197,7 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/string'
+            type: string
       summary: Save User
       tags:
       - users

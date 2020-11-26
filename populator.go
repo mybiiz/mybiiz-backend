@@ -137,5 +137,25 @@ func Populate(db *gorm.DB) {
 		}
 	}
 
+	// Populate Cities
+	fmt.Println("Populating cities...")
+
+	cities := []City{
+		{Name: "Surabaya", Lat: -7.2754438, Lon: 112.6426429},
+		{Name: "Jakarta", Lat: -6.2293867, Lon: 106.6894301},
+		{Name: "Malang", Lat: -7.9784695, Lon: 112.5617421},
+		{Name: "Bali", Lat: -8.4543385, Lon: 114.5110407},
+	}
+
+	for _, city := range cities {
+		var foundCity City
+		if res := db.Where("name = ?", city.Name).First(&foundCity); res.Error != nil {
+			fmt.Println("City", city.Name, "not found! Creating...")
+			db.Save(&city)
+		} else {
+			fmt.Println("City", city.Name, "found!")
+		}
+	}
+
 	fmt.Println("Population successful!")
 }

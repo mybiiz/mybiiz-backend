@@ -57,7 +57,9 @@ func DbInit() *gorm.DB {
 		&Laundry{},
 		&LaundryType{},
 		&ServiceType{},
-		&User{}}
+		&User{},
+		&City{},
+	}
 
 	for _, table := range tables {
 		db.AutoMigrate(table)
