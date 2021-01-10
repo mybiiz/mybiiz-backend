@@ -261,6 +261,39 @@ definitions:
       updatedAt:
         type: string
     type: object
+  main.RoomImage:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      roomId:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  main.RoomImageView:
+    properties:
+      imageBase64:
+        type: string
+      roomImage:
+        $ref: '#/definitions/main.RoomImage'
+    type: object
+  main.RoomPostBody:
+    properties:
+      room:
+        $ref: '#/definitions/main.Room'
+      roomImageDeleteIds:
+        items:
+          type: integer
+        type: array
+      roomImageViews:
+        items:
+          $ref: '#/definitions/main.RoomImageView'
+        type: array
+    type: object
   main.RoomType:
     properties:
       createdAt:
@@ -990,6 +1023,43 @@ paths:
           schema:
             $ref: '#/definitions/main.Room'
       summary: Get Room
+      tags:
+      - rooms
+  /rooms/{id}/view:
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.RoomPostBody'
+      summary: Get room view
+      tags:
+      - rooms
+  /rooms/save:
+    post:
+      parameters:
+      - description: RoomPostBody
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.RoomPostBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Room'
+      summary: Save Room
       tags:
       - rooms
   /roomtypes:

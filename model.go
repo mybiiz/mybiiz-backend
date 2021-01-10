@@ -103,6 +103,12 @@ type Room struct {
 	Business           Business         `json:"business"`
 }
 
+type RoomImage struct {
+	GormModel
+	DataPrefix string `json:"dataPrefix"`
+	RoomID     uint   `json:"roomId"`
+}
+
 type GuestType struct {
 	GormModel
 	Name string `json:"name"`

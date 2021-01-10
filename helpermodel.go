@@ -12,6 +12,17 @@ type UserPostBody struct {
 	Name     string `json:"name"`
 }
 
+type RoomPostBody struct {
+	Room               Room            `json:"room"`
+	RoomImageViews     []RoomImageView `json:"roomImageViews"`
+	RoomImageDeleteIds []uint          `json:"roomImageDeleteIds"`
+}
+
+type RoomImageView struct {
+	RoomImage   RoomImage `json:"roomImage"`
+	ImageBase64 string    `json:"imageBase64"`
+}
+
 type RegisterPostBody struct {
 	User    User    `json:"user"`
 	Partner Partner `json:"partner"`

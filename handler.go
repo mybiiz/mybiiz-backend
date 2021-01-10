@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"math"
 	"math/rand"
 	"net/http"
@@ -1119,5 +1120,95 @@ func AllGuestTypes(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var guestTypes []GuestType
 		All(db, &guestTypes, w, r)
+	}
+}
+
+// GetRoomView endpoint
+// @Summary Get room view
+// @Tags rooms
+// @Produce  json
+// @Param   id      path   int     true  "ID"
+// @Success 200 {object} RoomPostBody
+// @Router /rooms/{id}/view [get]
+func GetRoomView(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := mux.Vars(r)["id"]
+		w.Header().Set("content-type", "application/json")
+
+		var room Room
+		db.Where("id = ?", id).First(&room)
+
+		var roomImages []RoomImage
+		db.Where("room_id = ?", room.ID).Find(&roomImages)
+
+		roomImageViews := []RoomImageView{}
+
+		for _, roomImage := range roomImages {
+			imageBase64Bytes, err := ioutil.ReadFile(fmt.Sprintf("img/room-%s-%d", id, roomImage.ID))
+
+			if err != nil {
+				fmt.Println("Error reading room image", id, roomImage.ID)
+			} else {
+				imageBase64String := base64.StdEncoding.EncodeToString(imageBase64Bytes)
+
+				roomImageViews = append(
+					roomImageViews,
+					RoomImageView{RoomImage: roomImage,
+						ImageBase64: fmt.Sprintf("%s;base64,%s", roomImage.DataPrefix, imageBase64String),
+					},
+				)
+			}
+		}
+
+		roomPostBody := RoomPostBody{
+			Room:           room,
+			RoomImageViews: roomImageViews,
+		}
+
+		json.NewEncoder(w).Encode(&roomPostBody)
+	}
+}
+
+// SaveRoom endpoint
+// @Summary Save Room
+// @Tags rooms
+// @Produce  json
+// @Param   body      body  RoomPostBody     true "RoomPostBody"
+// @Success 200 {object} Room
+// @Router /rooms/save [post]
+func SaveRoom(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var roomPostBody RoomPostBody
+		json.NewDecoder(r.Body).Decode(&roomPostBody)
+
+		// Save room
+		db.Save(&roomPostBody.Room)
+		fmt.Println("Saved room id: ", roomPostBody.Room.ID)
+
+		// Save images
+		for _, roomImageView := range roomPostBody.RoomImageViews {
+			roomImageView.RoomImage.RoomID = roomPostBody.Room.ID
+
+			if strings.Contains(roomImageView.ImageBase64, ";base64,") {
+				imageBase64Contents := strings.Split(roomImageView.ImageBase64, ";base64,")[1]
+
+				b64DecodedBin, err := base64.StdEncoding.DecodeString(imageBase64Contents)
+
+				if err != nil {
+					fmt.Println("Error decoding base 64 contents")
+				}
+
+				db.Save(&roomImageView.RoomImage)
+
+				// Saved room image ID
+				fmt.Println("Saved image id: ", roomImageView.RoomImage.ID, roomImageView.RoomImage.DataPrefix)
+				fmt.Println("Image len to save:", len(roomImageView.ImageBase64))
+
+				ioutil.WriteFile(fmt.Sprintf("img/room-%d-%d", roomPostBody.Room.ID, roomImageView.RoomImage.ID), b64DecodedBin, 777)
+			} else {
+				fmt.Println("String does not contain ;base64,")
+			}
+
+		}
 	}
 }

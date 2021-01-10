@@ -1003,6 +1003,36 @@ var doc = `{
                 }
             }
         },
+        "/rooms/save": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Save Room",
+                "parameters": [
+                    {
+                        "description": "RoomPostBody",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.RoomPostBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Room"
+                        }
+                    }
+                }
+            }
+        },
         "/rooms/{id}": {
             "get": {
                 "produces": [
@@ -1052,6 +1082,34 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/main.Room"
+                        }
+                    }
+                }
+            }
+        },
+        "/rooms/{id}/view": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Get room view",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.RoomPostBody"
                         }
                     }
                 }
@@ -1776,6 +1834,57 @@ var doc = `{
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "main.RoomImage": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "roomId": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.RoomImageView": {
+            "type": "object",
+            "properties": {
+                "imageBase64": {
+                    "type": "string"
+                },
+                "roomImage": {
+                    "$ref": "#/definitions/main.RoomImage"
+                }
+            }
+        },
+        "main.RoomPostBody": {
+            "type": "object",
+            "properties": {
+                "room": {
+                    "$ref": "#/definitions/main.Room"
+                },
+                "roomImageDeleteIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "roomImageViews": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.RoomImageView"
+                    }
                 }
             }
         },

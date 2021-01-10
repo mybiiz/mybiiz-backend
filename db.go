@@ -59,6 +59,7 @@ func DbInit() *gorm.DB {
 		&ServiceType{},
 		&User{},
 		&City{},
+		&RoomImage{},
 	}
 
 	for _, table := range tables {

@@ -71,8 +71,10 @@ func Route(r *mux.Router, dbPointer **gorm.DB) {
 
 	// Room
 	r.HandleFunc("/rooms", AllRooms(db)).Methods("GET")
+	r.HandleFunc("/rooms/{id}/view", GetRoomView(db)).Methods("GET")
 	r.HandleFunc("/rooms/{id}", GetRoom(db)).Methods("GET")
 	r.HandleFunc("/rooms/{id}", DeleteRoom(db)).Methods("DELETE")
+	r.HandleFunc("/rooms/save", SaveRoom(db)).Methods("POST")
 	r.HandleFunc("/rooms", PostRoom(db)).Methods("POST")
 
 	// ComingSoonEmail
