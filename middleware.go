@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
+	"github.com/andybalholm/brotli"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/joho/godotenv"
 )
@@ -37,7 +40,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			})
 
 			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid { // Set id from recvd token to writer header
-				fmt.Println("Token ID:", claims["id"])
+				// fmt.Println("Token ID:", claims["id"])
 				w.Header().Set("id", fmt.Sprintf("%s", claims["id"]))
 			} else {
 				fmt.Println(err)
@@ -45,5 +48,28 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		next.ServeHTTP(w, r)
+	})
+}
+
+type brotliResponseWriter struct {
+	io.Writer
+	http.ResponseWriter
+}
+
+func (w brotliResponseWriter) Write(b []byte) (int, error) {
+	return w.Writer.Write(b)
+}
+
+func BrotliMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.Contains(r.Header.Get("Accept-Encoding"), "br") {
+			next.ServeHTTP(w, r)
+			return
+		}
+		w.Header().Set("Content-Encoding", "br")
+		br := brotli.NewWriter(w)
+		defer br.Close()
+		brr := brotliResponseWriter{Writer: br, ResponseWriter: w}
+		next.ServeHTTP(brr, r)
 	})
 }

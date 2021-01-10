@@ -21,6 +21,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.Use(AuthMiddleware)
+	r.Use(BrotliMiddleware)
 	Route(r, &db)
 
 	// handler := cors.Default().Handler(r)
